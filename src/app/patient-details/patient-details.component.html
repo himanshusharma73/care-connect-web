@@ -1,0 +1,180 @@
+<div class="container">
+    <div class="content-wrapper">
+      <!-- Header with back button -->
+      <div class="header">
+        <button class="back-button" (click)="goBack()">
+          <i class="fas fa-arrow-left"></i> Back to Patients
+        </button>
+        <h1>Patient Details</h1>
+        <div class="header-actions">
+          <button class="edit-button" (click)="editPatient()">
+            <i class="fas fa-edit"></i> Edit Patient
+          </button>
+        </div>
+      </div>
+  
+      <!-- Loading and Error States -->
+      <div *ngIf="loading" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading patient details...</p>
+      </div>
+  
+      <div *ngIf="error" class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+  
+      <!-- Patient Information -->
+      <div *ngIf="patient && !loading" class="patient-info">
+        <div class="patient-header">
+          <h2>{{ patient.name.firstName }} {{ patient.name.middleName ? patient.name.middleName + ' ' : ''}}{{ patient.name.lastName }}</h2>
+          <div class="patient-id">ID: {{ patient.patientId }}</div>
+        </div>
+  
+        <div class="info-grid">
+          <!-- Personal Information -->
+          <div class="info-section">
+            <h3><i class="fas fa-user"></i> Personal Information</h3>
+            <div class="info-content">
+              <div class="info-item">
+                <label>Gender</label>
+                <span>{{ patient.gender }}</span>
+              </div>
+              <div class="info-item">
+                <label>Birthdate</label>
+                <span>{{ patient.birthdate | date:'mediumDate' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Email</label>
+                <span>{{ patient.email }}</span>
+              </div>
+              <div class="info-item">
+                <label>Mobile</label>
+                <span>{{ patient.mobileNo || 'Not provided' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Adhar Number</label>
+                <span>{{ patient.adharNo || 'Not provided' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Emergency Contact</label>
+                <span>{{ patient.emergencyContactNumber || 'Not provided' }}</span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Address Information -->
+          <div class="info-section">
+            <h3><i class="fas fa-home"></i> Address Information</h3>
+            <div class="info-content">
+              <div class="info-item">
+                <label>Street</label>
+                <span>{{ patient.address?.street || 'Not provided' }}</span>
+              </div>
+              <div class="info-item">
+                <label>City</label>
+                <span>{{ patient.address?.city || 'Not provided' }}</span>
+              </div>
+              <div class="info-item">
+                <label>State</label>
+                <span>{{ patient.address?.state || 'Not provided' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Postal Code</label>
+                <span>{{ patient.address?.postalCode || 'Not provided' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Country</label>
+                <span>{{ patient.address?.country || 'Not provided' }}</span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Medical Information -->
+          <div class="info-section">
+            <h3><i class="fas fa-heartbeat"></i> Medical Information</h3>
+            <div class="info-content">
+              <div class="info-item">
+                <label>Blood Group</label>
+                <span>{{ patient.bloodGroup }}</span>
+              </div>
+              <div class="info-item">
+                <label>Smoker</label>
+                <span [class.status-yes]="patient.isSmoker" [class.status-no]="!patient.isSmoker">
+                  {{ patient.isSmoker ? 'Yes' : 'No' }}
+                </span>
+              </div>
+              <div class="info-item">
+                <label>Alcoholic</label>
+                <span [class.status-yes]="patient.isAlcoholic" [class.status-no]="!patient.isAlcoholic">
+                  {{ patient.isAlcoholic ? 'Yes' : 'No' }}
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Additional Information -->
+          <div class="info-section">
+            <h3><i class="fas fa-info-circle"></i> Additional Information</h3>
+            <div class="info-content">
+              <div class="info-item">
+                <label>Marital Status</label>
+                <span>{{ patient.maritalStatus }}</span>
+              </div>
+              <div class="info-item">
+                <label>Occupation</label>
+                <span>{{ patient.occupation }}</span>
+              </div>
+              <div class="info-item">
+                <label>Preferred Language</label>
+                <span>{{ patient.preferredLanguage }}</span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Insurance Information -->
+          <div class="info-section">
+            <h3><i class="fas fa-file-medical"></i> Insurance Details</h3>
+            <div class="info-content">
+              <div class="info-item">
+                <label>Has Insurance</label>
+                <span [class.status-yes]="patient.hasInsurance" [class.status-no]="!patient.hasInsurance">
+                  {{ patient.hasInsurance ? 'Yes' : 'No' }}
+                </span>
+              </div>
+              <div class="info-item">
+                <label>Medicaid Eligible</label>
+                <span [class.status-yes]="patient.isMedicaidEligible" [class.status-no]="!patient.isMedicaidEligible">
+                  {{ patient.isMedicaidEligible ? 'Yes' : 'No' }}
+                </span>
+              </div>
+              <div class="info-item">
+                <label>Self Pay</label>
+                <span [class.status-yes]="patient.selfPay" [class.status-no]="!patient.selfPay">
+                  {{ patient.selfPay ? 'Yes' : 'No' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Illness History -->
+        <div class="illness-history">
+          <h3><i class="fas fa-history"></i> Illness History</h3>
+          <div *ngIf="illnessHistory.length === 0" class="no-data">
+            <i class="fas fa-folder-open"></i>
+            <p>No illness history available.</p>
+          </div>
+          <div *ngIf="illnessHistory.length > 0" class="illness-list">
+            <div *ngFor="let illness of illnessHistory" class="illness-item">
+              <div class="illness-date">{{ illness.illnessDate | date:'mediumDate' }}</div>
+              <div class="illness-details">
+                <div class="illness-type">{{ illness.illness.join(', ') }}</div>
+                <div class="illness-description">{{ illness.description }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
