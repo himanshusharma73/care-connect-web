@@ -12,6 +12,14 @@ import { PatientDetailsComponent } from './patient-details/patient-details.compo
 import { AuthGuard } from './guards/auth.guard';
 import { PatientEditComponent } from './patient-edit/patient-edit.component';
 import { PatientAddComponent } from './patient-add/patient-add.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { AddIllnessDialogComponent } from './add-illness-dialog/add-illness-dialog.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +29,8 @@ import { PatientAddComponent } from './patient-add/patient-add.component';
     PatientListComponent,
     PatientDetailsComponent,
     PatientEditComponent,
-    PatientAddComponent
+    PatientAddComponent,
+    AddIllnessDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +38,13 @@ import { PatientAddComponent } from './patient-add/patient-add.component';
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDialogModule,
+    MatButtonModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

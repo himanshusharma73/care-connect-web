@@ -1,0 +1,40 @@
+<div class="illness-dialog">
+  <h2>Add Illness</h2>
+  
+  <form [formGroup]="illnessForm" class="illness-form">
+    <div class="form-field">
+      <label>
+        Illness
+        <span class="required">*</span>
+      </label>
+      <input type="text" formControlName="illness" placeholder="Enter illness">
+    </div>
+
+    <div class="form-field">
+      <label>
+        Description
+        <span class="required">*</span>
+      </label>
+      <textarea formControlName="description" placeholder="Enter description" rows="3"></textarea>
+    </div>
+
+    <div class="form-field">
+      <label>
+        Illness Date
+        <span class="required">*</span>
+      </label>
+      <input type="date" formControlName="illnessDate">
+    </div>
+
+    <div class="button-group">
+      <button type="button" class="cancel-button" (click)="onCancel()">Cancel</button>
+      <button type="submit" 
+              class="submit-button" 
+              [disabled]="!illnessForm.valid || isSubmitting"
+              (click)="onSubmit()">
+        Add Illness
+      </button>
+    </div>
+  </form>
+</div>
+

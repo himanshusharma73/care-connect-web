@@ -39,7 +39,6 @@ export interface PatientRequest {
 }
 
 export interface IllnessRequest {
-  illnessId?: number;
   patientId?: number;
   illness: string[];
   description: string;

@@ -122,6 +122,18 @@
     gap: 8px;
     transition: background-color 0.3s;
   }
+
+  .illness-button {
+    margin-right: auto;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+  }
   
   .cancel-button {
     background-color: #6c757d;
@@ -129,6 +141,15 @@
   }
   
   .cancel-button:hover {
+    background-color: #5a6268;
+  }
+
+  .illness-button {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .illness-button:hover {
     background-color: #5a6268;
   }
   

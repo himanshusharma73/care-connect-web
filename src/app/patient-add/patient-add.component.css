@@ -112,7 +112,19 @@
   }
   
   .cancel-button,
-  .save-button {
+  .save-button{
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+  }
+
+  .illness-button {
+    margin-right: auto;
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
@@ -139,6 +151,15 @@
   
   .save-button:hover {
     background-color: #218838;
+  }
+
+  .illness-button {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .illness-button:hover {
+    background-color: #5a6268;
   }
   
   .save-button:disabled {
@@ -200,7 +221,8 @@
     }
   
     .cancel-button,
-    .save-button {
+    .save-button,
+    .illness-button {
       width: 100%;
       justify-content: center;
     }

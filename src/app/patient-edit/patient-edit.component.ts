@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../services/patient.service';
 import { PatientRequest } from '../models/patient.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AddIllnessDialogComponent } from '../add-illness-dialog/add-illness-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-patient-edit',
@@ -20,7 +22,8 @@ export class PatientEditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private patientService: PatientService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog
   ) {
     this.patientForm = this.fb.group({
       name: this.fb.group({
@@ -109,6 +112,18 @@ export class PatientEditComponent implements OnInit {
     );
   }
 
+  openIllnessPopup(): void {
+    const dialogRef = this.dialog.open(AddIllnessDialogComponent, {
+      data: { patientId: this.patientId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Illness added');
+      }
+    });
+  }
+  
   onCancel(): void {
     this.router.navigate(['/patients']);
   }
