@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PatientService } from '../services/patient.service';
-import { PatientRequest, Address } from '../models/patient.model';
+import { PatientRequest, IllnessRequest } from '../models/patient.model';
 import { MatDialog } from '@angular/material/dialog';
 import { AddIllnessDialogComponent } from '../add-illness-dialog/add-illness-dialog.component';
 
@@ -17,7 +17,7 @@ export class PatientAddComponent {
   loading = false;
   error: string | null = null;
   successMessage: string | null = null;
-  illnessHistory: any[] = [];
+  illnessHistory: IllnessRequest = { illnessDate: '', illness: [], description: '' };
 
   constructor(
     private router: Router,
@@ -80,7 +80,7 @@ export class PatientAddComponent {
         this.loading = false;
         this.successMessage = 'Patient added successfully';
         const illnessHistory = JSON.parse(
-          localStorage.getItem('illnessHistory') || '[]'
+          localStorage.getItem('illnessHistory') || '{}'
         );
         this.patientId = response.data.patientId;
         if (this.patientId !== null) {
@@ -104,31 +104,64 @@ export class PatientAddComponent {
 
   openIllnessPopup(): void {
     const dialogRef = this.dialog.open(AddIllnessDialogComponent, {
-      data: { patientId: this.patientId },
+      data: { patientId: this.patientId},
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('Illness added');
+        this.illnessHistory = result;
+        console.log("Illness added");
+      }
+    });
+  }
+
+  editillness(): void {
+    const illnessHistory = JSON.parse(localStorage.getItem('illnessHistory') || '{}');
+    const dialogRef = this.dialog.open(AddIllnessDialogComponent, {
+      data: { patientId: this.patientId, illnessRequest: illnessHistory },
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.illnessHistory = result;
       }
     });
   }
 
   onCancel(): void {
+    this.clearIllnessHistoryOnUnload();
     this.router.navigate(['/patients']);
   }
 
-  
-  saveIllnessHistory(patientId: number, illnessHistory: any[]): void {
-    illnessHistory.forEach((illness) => {
-      this.patientService.saveIllness(patientId, illness).subscribe(
-        (response) => {
-          console.log('Illness saved successfully', response);
-        },
-        (error) => {
-          console.error('Error saving illness:', error);
-        }
-      );
-    });
+  saveIllnessHistory(patientId: number, illnessHistory: IllnessRequest): void {
+    this.patientService.saveIllness(patientId, illnessHistory).subscribe(
+      (response) => {
+        console.log('Illness saved successfully', response);
+      },
+      (error) => {
+        console.error('Error saving illness:', error);
+      }
+    );
+  }
+
+  clearIllnessHistoryOnUnload() {
+    localStorage.removeItem('illnessHistory');
+  }
+
+  hasIllnessHistory(): boolean {
+    return (
+      this.illnessHistory.illnessDate !== '' ||
+      this.illnessHistory.illness.length > 0 ||
+      this.illnessHistory.description !== ''
+    );
+  }
+
+  deleteIllness() {
+    this.illnessHistory = {
+    illness: [],
+    description: '',
+    illnessDate: ''
+  };
+    this.clearIllnessHistoryOnUnload()
   }
 }

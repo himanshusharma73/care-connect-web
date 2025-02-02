@@ -18,14 +18,14 @@ export class AddIllnessDialogComponent {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddIllnessDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { patientId: number },
+    @Inject(MAT_DIALOG_DATA) public data: { patientId: number, illnessRequest: IllnessRequest },
     private patientService: PatientService,
     private router: Router,
   ) {
     this.illnessForm = this.fb.group({
-      illness: ['', Validators.required],
-      description: ['', Validators.required],
-      illnessDate: ['', Validators.required]
+      illness: [this.data.illnessRequest?.illness || '', Validators.required],
+      description: [this.data.illnessRequest?.description || '', Validators.required],
+      illnessDate: [this.data.illnessRequest?.illnessDate || '', Validators.required]
     });
   }
 
@@ -66,12 +66,10 @@ export class AddIllnessDialogComponent {
 
   saveIllnessLocally(illnessRequest: IllnessRequest) {
   
-    const illnessList = JSON.parse(localStorage.getItem('illnessList') || '[]');
-    illnessList.push(illnessRequest);
-    localStorage.setItem('illnessHistory', JSON.stringify(illnessList));
+    localStorage.setItem('illnessHistory', JSON.stringify(illnessRequest));
 
     alert('Illness saved locally! It will be linked after saving the patient.');
-    this.dialogRef.close();
+    this.dialogRef.close(illnessRequest);
   }
 
   onCancel(): void {

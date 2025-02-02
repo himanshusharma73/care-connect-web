@@ -143,7 +143,7 @@
   .cancel-button:hover {
     background-color: #5a6268;
   }
-  
+
   .save-button {
     background-color: #28a745;
     color: white;
@@ -226,4 +226,101 @@
       width: 100%;
       justify-content: center;
     }
+  }
+
+  .illness-history {
+    margin-top: 32px;
+  }
+  
+  .illness-history h3 {
+    color: #2c3e50;
+    font-size: 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .illness-list {
+    display: grid;
+    gap: 16px;
+  }
+  
+  .illness-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+  }
+  .illness-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensures space between items */
+}
+
+  
+  .illness-date {
+    color: #6c757d;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .illness-details {
+    display: grid;
+    gap: 8px;
+  }
+  
+  .illness-type {
+    color: #2c3e50;
+    font-weight: 500;
+  }
+  
+  .illness-description {
+    color: #6c757d;
+    font-size: 14px;
+  }
+
+  .edit-button {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .edit-button:hover {
+    background-color: #5a6268;
+  }
+
+
+  .edit-button{
+    margin-left: auto;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+  }
+
+  .delete-button {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .delete-button:hover {
+    background-color: #e61919;
+  }
+
+
+  .delete-button{
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
   }
