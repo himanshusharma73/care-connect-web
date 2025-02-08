@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { AddIllnessDialogComponent } from './add-illness-dialog/add-illness-dialog.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { AddIllnessDialogComponent } from './add-illness-dialog/add-illness-dial
     PatientDetailsComponent,
     PatientEditComponent,
     PatientAddComponent,
-    AddIllnessDialogComponent
+    AddIllnessDialogComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
