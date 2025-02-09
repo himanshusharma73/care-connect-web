@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../services/patient.service';
-import { PatientRequest } from '../models/patient.model';
+import { IllnessRequest, PatientRequest } from '../models/patient.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddIllnessDialogComponent } from '../add-illness-dialog/add-illness-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -126,5 +126,5 @@ export class PatientEditComponent implements OnInit {
   
   onCancel(): void {
     this.router.navigate(['/patients']);
-  }
+    }
 }

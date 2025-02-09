@@ -1,4 +1,11 @@
-<header class="main-header">
-  <h1 class="main-title">Hospital Management System</h1>
-</header>
-<router-outlet></router-outlet>
+<div [class.with-sidebar]="showSidebar">
+  <app-sidebar *ngIf="showSidebar"></app-sidebar>
+
+    <main [class.main-with-sidebar]="showSidebar" [class.main-without-sidebar]="!showSidebar">
+      <div class="main">
+
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+
+</div>

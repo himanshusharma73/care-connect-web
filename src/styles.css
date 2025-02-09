@@ -1,1 +1,329 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Utility Classes */
+.p-5 {
+    padding: 15px;
+}
+
+.p-10 {
+    padding: 20px;
+}
+
+/* Layout Styles */
+.content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 64px);
+    padding-top: 40px;
+
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.header h1 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+/* Button Styles */
+.button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.back-button,
+.cancel-button,
+.illness-button {
+    background-color: #6c757d;
+    color: white;
+}
+
+.back-button:hover,
+.cancel-button:hover,
+.illness-button:hover {
+    background-color: #5a6268;
+}
+
+
+.save-button:hover {
+    background-color: #218838;
+}
+
+.save-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Form Styles */
+.form-sections {
+    display: grid;
+    gap: 24px;
+}
+
+.form-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.form-section h2 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #495057;
+}
+
+.form-control {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin: 0;
+}
+
+.form-actions {
+    display: flex;
+    gap: 20px;
+    padding-top: 24px;
+    padding: 20px;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Illness History Styles */
+.illness-history {
+    margin-top: 32px;
+}
+
+.illness-history h3 {
+    color: #2c3e50;
+    font-size: 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.illness-list {
+    display: grid;
+    gap: 16px;
+}
+
+.illness-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.illness-date {
+    color: #6c757d;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.illness-details {
+    display: grid;
+    gap: 8px;
+}
+
+.illness-type {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.illness-description {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* Action Buttons */
+.edit-button,
+.view-button,
+.delete-button,
+.add-button,
+.back-button,
+.illness-button,
+.cancel-button,
+.save-button{
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+    background-color: #6c757d;
+    color: white;
+}
+
+.edit-button:hover {
+    background-color: #e0a800;
+}
+
+.view-button:hover {
+    background-color: #0056b3;
+}
+
+.delete-button:hover {
+    background-color: #e61919;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    padding-right: 40px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    pointer-events: none;
+}
+
+/* No Data/Results Styles */
+.no-results,
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.no-results i,
+.no-data i {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+/* Status Indicators */
+.status-yes {
+    color: #28a745 !important;
+}
+
+.status-no {
+    color: #dc3545 !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .cancel-button,
+    .save-button,
+    .illness-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .dashboard-grid,
+    .info-grid,
+    .illness-item {
+        grid-template-columns: 1fr;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .search-box {
+        max-width: 100%;
+    }
+}

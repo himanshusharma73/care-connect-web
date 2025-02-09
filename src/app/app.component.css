@@ -1,13 +1,18 @@
-.main-header {
-    background: linear-gradient(to right, #0066ff, #00ccff);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .main-header h1 {
-    margin: 0;
-    font-size: 36px;
-    font-weight: bold;
-  }
+.with-sidebar {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-with-sidebar {
+  flex: 1;
+  /* margin-left: 250px; Width of the sidebar */
+  /* padding-top: 60px; Height of the header */
+}
+
+.main-without-sidebar {
+  flex: 1;
+  padding-top: 60px; /* Height of the header */
+}
+.main{
+  padding-top: 65px; /* Height of the header */
+}
