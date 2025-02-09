@@ -196,25 +196,6 @@
                 </div>
               </div>
             </div>
-            <div class="form-section">
-              
-              <div class="illness-history">
-                <h3><i class="fas fa-history"></i> Illness History</h3>
-                <div *ngIf="illnessHistory.length === 0" class="no-data">
-                  <i class="fas fa-folder-open"></i>
-                  <p>No illness history available.</p>
-                </div>
-                <div *ngIf="illnessHistory.length > 0" class="illness-list">
-                  <div *ngFor="let illness of illnessHistory" class="illness-item">
-                    <div class="illness-date">{{ illness.illnessDate | date:'mediumDate' }}</div>
-                    <div class="illness-details">
-                      <div class="illness-type">{{ illness.illness.join(', ') }}</div>
-                      <div class="illness-description">{{ illness.description }}</div>
-                    </div>               
-                  </div>
-                </div>
-              </div>
-              </div>
           </div>
         
           <div class="form-actions">
