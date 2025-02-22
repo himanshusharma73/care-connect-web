@@ -20,23 +20,16 @@ export class HomeComponent {
     private router: Router
   ) {}
 
-  onSubmit() {
+   onSubmit() {
     this.isLoading = true;
     this.loginError = '';
 
-    if (this.loginData.username && this.loginData.password) {
-      const isLoggedIn = this.authService.login(
-        this.loginData.username,
-        this.loginData.password
-      );
+    const isLoggedIn: boolean = this.authService.login(this.loginData.username, this.loginData.password);
 
-      if (isLoggedIn) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.loginError = 'Invalid username or password';
-      }
+    if (isLoggedIn) {
+      this.router.navigate(['/dashboard']);
     } else {
-      this.loginError = 'Please enter both username and password';
+      this.loginError = 'Invalid username or password. Please try again.';
     }
 
     this.isLoading = false;
