@@ -18,12 +18,12 @@ export class AddIllnessDialogComponent {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddIllnessDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { patientId: number, illnessRequest: IllnessRequest },
+    @Inject(MAT_DIALOG_DATA) public data: { patientId?: number; illnessRequest?: IllnessRequest },
     private patientService: PatientService,
-    private router: Router,
+    private router: Router
   ) {
     this.illnessForm = this.fb.group({
-      illness: [this.data.illnessRequest?.illness || '', Validators.required],
+      illness: [this.data.illnessRequest?.illness.join(', ') || '', Validators.required],
       description: [this.data.illnessRequest?.description || '', Validators.required],
       illnessDate: [this.data.illnessRequest?.illnessDate || '', Validators.required]
     });
@@ -32,10 +32,10 @@ export class AddIllnessDialogComponent {
   onSubmit() {
     if (this.illnessForm.valid) {
       this.isSubmitting = true;
-      this.error = "";
+      this.error = null;
 
       const illnessRequest: IllnessRequest = {
-        illness: [this.illnessForm.value.illness], 
+        illness: this.illnessForm.value.illness.split(',').map((i: string) => i.trim()), 
         description: this.illnessForm.value.description,
         illnessDate: this.illnessForm.value.illnessDate,
       };
@@ -45,13 +45,13 @@ export class AddIllnessDialogComponent {
       if (this.data.patientId) {
         this.saveIllnessToBackend(illnessRequest);
       } else {
-        this.saveIllnessLocally(illnessRequest);
+        this.dialogRef.close(illnessRequest);
       }
     }
   }
 
   saveIllnessToBackend(illnessRequest: IllnessRequest) {
-    this.patientService.saveIllness(this.data.patientId, illnessRequest).subscribe(
+    this.patientService.saveIllness(this.data.patientId!, illnessRequest).subscribe(
       (response) => {
         this.dialogRef.close(illnessRequest);
         setTimeout(() => {
@@ -59,17 +59,11 @@ export class AddIllnessDialogComponent {
         }, 1500);
       },
       (error) => {
-        this.error = 'Failed to add patient. Please try again.';
-        console.error('Error adding patient:', error);
-      })
-  }
-
-  saveIllnessLocally(illnessRequest: IllnessRequest) {
-  
-    localStorage.setItem('illnessHistory', JSON.stringify(illnessRequest));
-
-    alert('Illness saved locally! It will be linked after saving the patient.');
-    this.dialogRef.close(illnessRequest);
+        this.error = 'Failed to add illness. Please try again.';
+        console.error('Error adding illness:', error);
+        this.isSubmitting = false;
+      }
+    );
   }
 
   onCancel(): void {

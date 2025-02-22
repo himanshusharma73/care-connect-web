@@ -79,16 +79,11 @@ export class PatientAddComponent {
       (response) => {
         this.loading = false;
         this.successMessage = 'Patient added successfully';
-        const illnessHistory = JSON.parse(
-          localStorage.getItem('illnessHistory') || '{}'
-        );
         this.patientId = response.data.patientId;
-        if (this.patientId !== null) {
-          this.saveIllnessHistory(this.patientId, illnessHistory);
-        } else {
-          this.error = 'Failed to retrieve patient ID.';
+
+        if (this.patientId && this.hasIllnessHistory()) {
+          this.saveIllnessHistory(this.patientId, this.illnessHistory);
         }
-        localStorage.removeItem('illnessHistory');
 
         setTimeout(() => {
           this.router.navigate(['/patients']);
@@ -104,24 +99,23 @@ export class PatientAddComponent {
 
   openIllnessPopup(): void {
     const dialogRef = this.dialog.open(AddIllnessDialogComponent, {
-      data: { patientId: this.patientId},
+      data: { patientId: this.patientId, illnessRequest: this.illnessHistory },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: IllnessRequest | undefined) => {
       if (result) {
         this.illnessHistory = result;
-        console.log("Illness added");
+        console.log("Illness added:", this.illnessHistory);
       }
     });
   }
 
-  editillness(): void {
-    const illnessHistory = JSON.parse(localStorage.getItem('illnessHistory') || '{}');
+  editIllness(): void {
     const dialogRef = this.dialog.open(AddIllnessDialogComponent, {
-      data: { patientId: this.patientId, illnessRequest: illnessHistory },
+      data: { patientId: this.patientId, illnessRequest: this.illnessHistory },
     });
-  
-    dialogRef.afterClosed().subscribe((result) => {
+
+    dialogRef.afterClosed().subscribe((result: IllnessRequest | undefined) => {
       if (result) {
         this.illnessHistory = result;
       }
@@ -129,7 +123,6 @@ export class PatientAddComponent {
   }
 
   onCancel(): void {
-    this.clearIllnessHistoryOnUnload();
     this.router.navigate(['/patients']);
   }
 
@@ -140,12 +133,9 @@ export class PatientAddComponent {
       },
       (error) => {
         console.error('Error saving illness:', error);
+        this.error = 'Failed to save illness history.';
       }
     );
-  }
-
-  clearIllnessHistoryOnUnload() {
-    localStorage.removeItem('illnessHistory');
   }
 
   hasIllnessHistory(): boolean {
@@ -156,12 +146,7 @@ export class PatientAddComponent {
     );
   }
 
-  deleteIllness() {
-    this.illnessHistory = {
-    illness: [],
-    description: '',
-    illnessDate: ''
-  };
-    this.clearIllnessHistoryOnUnload()
+  deleteIllness(): void {
+    this.illnessHistory = { illness: [], description: '', illnessDate: '' }; 
   }
 }
