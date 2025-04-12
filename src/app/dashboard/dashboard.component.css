@@ -1,87 +1,192 @@
-  .dashboard-container {
-    display: flex;
-    min-height: 100vh;
+.dashboard-page {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f7ff, #e0f0ff);
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-item {
+  margin: 10px 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-link i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: #34495e;
+  color: #3498db;
+}
+
+.main-content {
+  flex: 1;
+  /* margin-left: 250px; */
+  /* Match sidebar width */
+  padding: 20px;
+  background: #f5f6fa;
+}
+
+.welcome-message {
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.btn-logout {
+  padding: 8px 15px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+  background: #c0392b;
+}
+
+.btn-logout i {
+  margin-right: 5px;
+}
+
+.notification-badge {
+  background: #e74c3c;
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  position: relative;
+  top: -5px;
+  right: -10px;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-card h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f1f1f1;
+  font-size: 1.3rem;
+}
+
+.card-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card-content li {
+  margin: 10px 0;
+}
+
+.card-content a {
+  color: #3498db;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.card-content a i {
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.card-content a:hover {
+  background: #f8f9fa;
+  color: #2980b9;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transform: translateX(-100%);
   }
-    
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .nav-item {
+    flex: 1 1 45%;
+    margin: 5px;
+  }
+
   .main-content {
-    flex: 1;
-    background: #f5f6fa;
-    padding: 20px;
+    margin-left: 0;
+    padding: 15px;
   }
-  
+
   .content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
   }
-  
-  .content-header h1 {
-    margin: 0;
-    color: #2c3e50;
-  }
-  
-  .user-section {
-    display: flex;
-    align-items: center;
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    /* Stack cards vertically on mobile */
     gap: 15px;
   }
-  
-  .btn-logout {
-    padding: 8px 15px;
-    background: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  /* Dashboard Grid */
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-  }
-  
+
   .dashboard-card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 15px;
   }
-  
-  .dashboard-card h3 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f1f1f1;
-  }
-  
-  .card-content ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .card-content li {
-    margin: 10px 0;
-  }
-  
-  .card-content a {
-    color: #3498db;
-    text-decoration: none;
-    display: block;
-    padding: 8px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  
-  .card-content a:hover {
-    background: #f8f9fa;
-    color: #2980b9;
-  }
-  
+}
