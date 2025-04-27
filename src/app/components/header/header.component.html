@@ -1,26 +1,27 @@
-<header class="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
-    <div class="container flex h-16 items-center justify-between px-4 md:px-6">
-        <div class="flex items-center gap-2">
-            <img src="assets/images/logo.png" alt="Care-Connect Logo" class="h-10 w-10 rounded-md">
-            <span class="text-xl font-bold text-teal-600">Care-Connect</span>
-        </div>
+<header class="fixed top-0 z-50 w-full border-b bg-white shadow-sm">
+    <div class="container mx-auto flex h-16 items-center justify-between px-4">
+    <a routerLink="/" class="flex items-center gap-2">
+        <img src="assets/images/logo.png" alt="Care-Connect Logo" class="h-10 w-10 rounded-md">
+        <span class="text-xl font-bold text-teal-600">Care-Connect</span>
+    </a>
+
 
         <ng-container *ngIf="!isDashboard">
             <nav class="hidden md:flex gap-6">
-                <a routerLink="/#features"
-                    class="text-sm font-medium hover:text-teal-600 transition-colors">Features</a>
-                <a routerLink="/#how-it-works" class="text-sm font-medium hover:text-teal-600 transition-colors">How It
-                    Works</a>
-                <a routerLink="/#pricing" class="text-sm font-medium hover:text-teal-600 transition-colors">Pricing</a>
-                <a routerLink="/#testimonials"
-                    class="text-sm font-medium hover:text-teal-600 transition-colors">Testimonials</a>
+                <a href="#features" class="text-sm font-medium hover:text-teal-600 transition-colors">Features</a>
+                <a href="#how-it-works" class="text-sm font-medium hover:text-teal-600 transition-colors">How It Works</a>
+                <a href="#pricing" class="text-sm font-medium hover:text-teal-600 transition-colors">Pricing</a>
+                <a href="#testimonials" class="text-sm font-medium hover:text-teal-600 transition-colors">Testimonials</a>
             </nav>
+
             <div class="flex items-center gap-4">
-                <a routerLink="/login" class="hidden md:block">
-                    <button mat-stroked-button>Log In</button>
+                <a routerLink="/login"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
+                    Log In
                 </a>
-                <a routerLink="/signup">
-                    <button mat-flat-button color="primary">Get Started</button>
+                <a routerLink="/signup"
+                    class="px-4 py-2 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700">
+                    Get Started
                 </a>
             </div>
         </ng-container>
@@ -39,9 +40,13 @@
                     class="text-sm font-medium transition-colors">Admin</a>
             </nav>
             <div class="flex items-center gap-4">
-                <button mat-stroked-button routerLink="/dashboard/profile">Profile</button>
-                <button mat-stroked-button (click)="logout()">Logout</button>
+                <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+                    routerLink="/dashboard/profile">Profile</button>
+                <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+                    (click)="logout()">Logout</button>
             </div>
         </ng-container>
     </div>
 </header>
+<!-- Add a spacer to prevent content from being hidden under the fixed header -->
+<div class="h-16"></div>

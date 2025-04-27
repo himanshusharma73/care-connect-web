@@ -1,0 +1,237 @@
+<div class="container px-4 py-8 md:px-6">
+    <div class="flex flex-col gap-4 md:gap-8">
+        <div class="flex items-center justify-between">
+            <h1 class="text-3xl font-bold">{{isEditing ? 'Edit Patient' : 'Register New Patient'}}</h1>
+            <button mat-stroked-button routerLink="/dashboard/patients">Back to Patients</button>
+        </div>
+
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{isEditing ? 'Edit Patient' : 'Register New Patient'}}</mat-card-title>
+                <mat-card-subtitle>
+                    {{isEditing ? 'Update patient information in the system' : 'Enter patient details to register them
+                    in the system'}}
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div *ngIf="isLoading" class="flex justify-center py-8">
+                    <mat-spinner></mat-spinner>
+                </div>
+
+                <form *ngIf="!isLoading" [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <!-- Personal Information -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium">Personal Information</h3>
+
+                        <div formGroupName="name" class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label>First Name</mat-label>
+                                <input matInput formControlName="firstName" required>
+                                <mat-error *ngIf="patientForm.get('name.firstName')?.hasError('required')">
+                                    First name is required
+                                </mat-error>
+                                <mat-error *ngIf="patientForm.get('name.firstName')?.hasError('minlength')">
+                                    First name must be at least 3 characters
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Middle Name</mat-label>
+                                <input matInput formControlName="middleName">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Last Name</mat-label>
+                                <input matInput formControlName="lastName" required>
+                                <mat-error *ngIf="patientForm.get('name.lastName')?.hasError('required')">
+                                    Last name is required
+                                </mat-error>
+                                <mat-error *ngIf="patientForm.get('name.lastName')?.hasError('minlength')">
+                                    Last name must be at least 3 characters
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Date of Birth</mat-label>
+                                <input matInput [matDatepicker]="picker" formControlName="birthdate" required>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                                <mat-error *ngIf="patientForm.get('birthdate')?.hasError('required')">
+                                    Date of birth is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Gender</mat-label>
+                                <mat-select formControlName="gender" required>
+                                    <mat-option value="Male">Male</mat-option>
+                                    <mat-option value="Female">Female</mat-option>
+                                    <mat-option value="Other">Other</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="patientForm.get('gender')?.hasError('required')">
+                                    Gender is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Blood Group</mat-label>
+                                <mat-select formControlName="bloodGroup" required>
+                                    <mat-option value="A+">A+</mat-option>
+                                    <mat-option value="A-">A-</mat-option>
+                                    <mat-option value="B+">B+</mat-option>
+                                    <mat-option value="B-">B-</mat-option>
+                                    <mat-option value="AB+">AB+</mat-option>
+                                    <mat-option value="AB-">AB-</mat-option>
+                                    <mat-option value="O+">O+</mat-option>
+                                    <mat-option value="O-">O-</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="patientForm.get('bloodGroup')?.hasError('required')">
+                                    Blood group is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input matInput type="email" formControlName="email" required>
+                                <mat-error *ngIf="patientForm.get('email')?.hasError('required')">
+                                    Email is required
+                                </mat-error>
+                                <mat-error *ngIf="patientForm.get('email')?.hasError('email')">
+                                    Please enter a valid email address
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Mobile Number</mat-label>
+                                <input matInput type="number" formControlName="mobileNo">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Marital Status</mat-label>
+                                <mat-select formControlName="maritalStatus" required>
+                                    <mat-option value="Single">Single</mat-option>
+                                    <mat-option value="Married">Married</mat-option>
+                                    <mat-option value="Divorced">Divorced</mat-option>
+                                    <mat-option value="Widowed">Widowed</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="patientForm.get('maritalStatus')?.hasError('required')">
+                                    Marital status is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Occupation</mat-label>
+                                <input matInput formControlName="occupation" required>
+                                <mat-error *ngIf="patientForm.get('occupation')?.hasError('required')">
+                                    Occupation is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="space-y-4" formGroupName="address">
+                        <h3 class="text-lg font-medium">Address</h3>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Street</mat-label>
+                            <input matInput formControlName="street" required>
+                            <mat-error *ngIf="patientForm.get('address.street')?.hasError('required')">
+                                Street is required
+                            </mat-error>
+                        </mat-form-field>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <mat-form-field appearance="outline">
+                                <mat-label>City</mat-label>
+                                <input matInput formControlName="city" required>
+                                <mat-error *ngIf="patientForm.get('address.city')?.hasError('required')">
+                                    City is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>State</mat-label>
+                                <input matInput formControlName="state" required>
+                                <mat-error *ngIf="patientForm.get('address.state')?.hasError('required')">
+                                    State is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Postal Code</mat-label>
+                                <input matInput formControlName="postalCode" required>
+                                <mat-error *ngIf="patientForm.get('address.postalCode')?.hasError('required')">
+                                    Postal code is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Country</mat-label>
+                                <input matInput formControlName="country" required>
+                                <mat-error *ngIf="patientForm.get('address.country')?.hasError('required')">
+                                    Country is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Medical Information -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium">Medical Information</h3>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Emergency Contact</mat-label>
+                                <input matInput type="number" formControlName="emergencyContactNumber">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Preferred Language</mat-label>
+                                <input matInput formControlName="preferredLanguage" required>
+                                <mat-error *ngIf="patientForm.get('preferredLanguage')?.hasError('required')">
+                                    Preferred language is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                            <mat-checkbox formControlName="isSmoker">Smoker</mat-checkbox>
+                            <mat-checkbox formControlName="isAlcoholic">Alcoholic</mat-checkbox>
+                        </div>
+                    </div>
+
+                    <!-- Insurance Information -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium">Insurance Information</h3>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                            <mat-checkbox formControlName="hasInsurance">Has Insurance</mat-checkbox>
+                            <mat-checkbox formControlName="isMedicaidEligible">Medicaid Eligible</mat-checkbox>
+                            <mat-checkbox formControlName="selfPay">Self Pay</mat-checkbox>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" mat-stroked-button routerLink="/dashboard/patients"
+                            [disabled]="isLoading">
+                            Cancel
+                        </button>
+                        <button type="submit" mat-flat-button color="primary"
+                            [disabled]="patientForm.invalid || isLoading">
+                            {{isLoading ? 'Saving...' : isEditing ? 'Update Patient' : 'Register Patient'}}
+                        </button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

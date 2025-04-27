@@ -1,59 +1,56 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-
-interface User {
-  id: number;
-  username: string;
-  role: string;
-  token: string;
-}
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { tap, delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User | null>;
-  public currentUser: Observable<User | null>;
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User | null>(
-      JSON.parse(localStorage.getItem('currentUser') || 'null')
-    );
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
+  private apiUrl = 'http://localhost:8080/api';
 
-  public get currentUserValue(): User | null {
-    return this.currentUserSubject.value;
-  }
+  constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<User> {
-    // In a real app, this would call your backend API
-    // For now, we'll simulate a successful login
-    return new Observable<User>(observer => {
-      setTimeout(() => {
-        const user: User = {
-          id: 1,
-          username: username,
-          role: 'admin',
-          token: 'fake-jwt-token'
-        };
-        
-        // Store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        
-        observer.next(user);
-        observer.complete();
-      }, 1000);
-    });
+  login(email: string, password: string): Observable<any> {
+    
+     if (email === 'admin@gmail.com' && password === 'admin') {
+      return of({ token: 'fake-jwt-token', user: { email } }).pipe(
+        delay(1000),
+        tap(response => {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.isAuthenticatedSubject.next(true);
+        })
+      );
+    }
+    
+    return throwError(() => new Error('Invalid credentials'));
+    
+    // Uncomment for actual API implementation
+    // return this.http.post<any>(`${this.apiUrl}/auth/login`, { email, password })
+    //   .pipe(
+    //     tap(response => {
+    //       localStorage.setItem('token', response.token);
+    //       localStorage.setItem('user', JSON.stringify(response.user));
+    //       this.isAuthenticatedSubject.next(true);
+    //     })
+    //   );
   }
 
   logout(): void {
-    // Remove user from local storage and set current user to null
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.isAuthenticatedSubject.next(false);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  private hasToken(): boolean {
+    return !!this.getToken();
   }
 }

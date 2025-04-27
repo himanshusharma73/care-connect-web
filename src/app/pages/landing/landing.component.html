@@ -4,45 +4,41 @@
     <main class="flex-1">
         <!-- Hero Section -->
         <section class="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-teal-50">
-            <div class="container px-4 md:px-6 flex flex-col lg:flex-row items-center gap-8">
-                <div class="flex flex-col justify-center space-y-4 lg:w-1/2">
+            <div class="container mx-auto px-4 md:px-6">
+                <div class="flex flex-col justify-center space-y-4 max-w-3xl mx-auto text-center">
                     <div class="space-y-2">
                         <h1 class="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                             Streamline Healthcare Management for Your Hospital
                         </h1>
-                        <p class="max-w-[600px] text-gray-500 md:text-xl">
-                            Care-Connect helps hospitals manage patients, doctors, and administrative tasks in one
-                            unified platform.
+                        <p class="max-w-[600px] text-gray-500 md:text-xl mx-auto">
+                            Care-Connect helps hospitals manage patients, doctors, and administrative tasks in one unified
+                            platform.
                         </p>
                     </div>
-                    <div class="flex flex-col gap-2 min-[400px]:flex-row">
-                        <a routerLink="/signup">
-                            <button mat-flat-button color="primary" class="px-8 py-2">Start Free Trial</button>
+                    <div class="flex flex-col gap-2 sm:flex-row justify-center">
+                        <a routerLink="/signup"
+                            class="inline-flex items-center justify-center px-5 py-3 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700">
+                            Start Free Trial
                         </a>
-                        <a routerLink="#demo">
-                            <button mat-stroked-button class="px-8 py-2">Watch Demo</button>
+                        <a routerLink="/demo"
+                            class="inline-flex items-center justify-center px-5 py-3 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
+                            Watch Demo
                         </a>
-                    </div>
-                </div>
-                <div class="lg:w-1/2 flex justify-center">
-                    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-                        <app-login></app-login>
                     </div>
                 </div>
             </div>
         </section>
-
+        
         <!-- Features Section -->
         <section id="features" class="w-full py-12 md:py-24 lg:py-32">
-            <div class="container px-4 md:px-6">
+            <div class="container mx-auto px-4 md:px-6">
                 <div class="flex flex-col items-center justify-center space-y-4 text-center">
                     <div class="space-y-2">
                         <div class="inline-block rounded-lg bg-teal-100 px-3 py-1 text-sm text-teal-800">Features</div>
                         <h2 class="text-3xl font-bold tracking-tighter md:text-4xl/tight">
                             Everything You Need to Manage Your Hospital
                         </h2>
-                        <p
-                            class="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                        <p class="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                             Care-Connect provides a comprehensive suite of tools to streamline your hospital operations.
                         </p>
                     </div>
@@ -51,7 +47,7 @@
                     <div *ngFor="let feature of features"
                         class="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
                         <div class="rounded-full bg-teal-100 p-3">
-                            <mat-icon class="text-teal-600">{{feature.icon}}</mat-icon>
+                            <i class="material-icons text-teal-600">{{feature.icon}}</i>
                         </div>
                         <h3 class="text-xl font-bold">{{feature.title}}</h3>
                         <p class="text-center text-gray-500">{{feature.description}}</p>
@@ -59,7 +55,6 @@
                 </div>
             </div>
         </section>
-
         <!-- How It Works Section -->
         <section id="how-it-works" class="w-full py-12 md:py-24 lg:py-32 bg-teal-50">
             <div class="container px-4 md:px-6">

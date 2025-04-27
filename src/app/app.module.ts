@@ -16,17 +16,21 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 // Components
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LandingComponent } from './pages/landing/landing.component';
-import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { PatientListComponent } from './pages/patients/patient-list/patient-list.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { AppLoginFormComponent } from './app-login-form/app-login-form.component';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { LoginPageComponent } from './pages/login/login.component';
+import { PatientFormComponent } from './pages/patients/patient-form/patient-form.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CheckupFormComponent } from './pages/patients/checkup-form/checkup-form.component';
 
 
 @NgModule({
@@ -35,10 +39,12 @@ import { AppLoginFormComponent } from './app-login-form/app-login-form.component
     HeaderComponent,
     FooterComponent,
     LandingComponent,
-    LoginComponent,
+    LoginFormComponent,
     DashboardComponent,
     PatientListComponent,
-    AppLoginFormComponent
+    LoginPageComponent,
+    PatientFormComponent,
+    CheckupFormComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +62,9 @@ import { AppLoginFormComponent } from './app-login-form/app-login-form.component
     MatProgressSpinnerModule,
     MatSelectModule,
     MatTableModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
      {
