@@ -1,0 +1,201 @@
+<div class="flex min-h-screen flex-col">
+    <app-header></app-header>
+
+    <main class="flex-1">
+        <!-- Hero Section -->
+        <section class="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-teal-50">
+            <div class="container px-4 md:px-6 flex flex-col lg:flex-row items-center gap-8">
+                <div class="flex flex-col justify-center space-y-4 lg:w-1/2">
+                    <div class="space-y-2">
+                        <h1 class="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                            Streamline Healthcare Management for Your Hospital
+                        </h1>
+                        <p class="max-w-[600px] text-gray-500 md:text-xl">
+                            Care-Connect helps hospitals manage patients, doctors, and administrative tasks in one
+                            unified platform.
+                        </p>
+                    </div>
+                    <div class="flex flex-col gap-2 min-[400px]:flex-row">
+                        <a routerLink="/signup">
+                            <button mat-flat-button color="primary" class="px-8 py-2">Start Free Trial</button>
+                        </a>
+                        <a routerLink="#demo">
+                            <button mat-stroked-button class="px-8 py-2">Watch Demo</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+                        <app-login></app-login>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="w-full py-12 md:py-24 lg:py-32">
+            <div class="container px-4 md:px-6">
+                <div class="flex flex-col items-center justify-center space-y-4 text-center">
+                    <div class="space-y-2">
+                        <div class="inline-block rounded-lg bg-teal-100 px-3 py-1 text-sm text-teal-800">Features</div>
+                        <h2 class="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+                            Everything You Need to Manage Your Hospital
+                        </h2>
+                        <p
+                            class="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                            Care-Connect provides a comprehensive suite of tools to streamline your hospital operations.
+                        </p>
+                    </div>
+                </div>
+                <div class="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
+                    <div *ngFor="let feature of features"
+                        class="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
+                        <div class="rounded-full bg-teal-100 p-3">
+                            <mat-icon class="text-teal-600">{{feature.icon}}</mat-icon>
+                        </div>
+                        <h3 class="text-xl font-bold">{{feature.title}}</h3>
+                        <p class="text-center text-gray-500">{{feature.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="w-full py-12 md:py-24 lg:py-32 bg-teal-50">
+            <div class="container px-4 md:px-6">
+                <div class="flex flex-col items-center justify-center space-y-4 text-center">
+                    <div class="space-y-2">
+                        <div class="inline-block rounded-lg bg-teal-100 px-3 py-1 text-sm text-teal-800">How It Works
+                        </div>
+                        <h2 class="text-3xl font-bold tracking-tighter md:text-4xl/tight">Simple and Efficient Workflow
+                        </h2>
+                        <p
+                            class="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                            Our platform is designed to make healthcare management intuitive and efficient.
+                        </p>
+                    </div>
+                </div>
+                <div class="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3 mt-12">
+                    <div *ngFor="let step of steps; let i = index" class="flex flex-col items-center space-y-4">
+                        <div
+                            class="flex h-16 w-16 items-center justify-center rounded-full bg-teal-600 text-white text-2xl font-bold">
+                            {{i + 1}}
+                        </div>
+                        <h3 class="text-xl font-bold">{{step.title}}</h3>
+                        <p class="text-center text-gray-500">{{step.description}}</p>
+                    </div>
+                </div>
+                <div class="mt-12 flex justify-center">
+                    <img src="assets/images/workflow.png" alt="Care-Connect Workflow"
+                        class="rounded-lg shadow-lg max-w-full h-auto">
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="w-full py-12 md:py-24 lg:py-32">
+            <div class="container px-4 md:px-6">
+                <div class="flex flex-col items-center justify-center space-y-4 text-center">
+                    <div class="space-y-2">
+                        <div class="inline-block rounded-lg bg-teal-100 px-3 py-1 text-sm text-teal-800">Pricing</div>
+                        <h2 class="text-3xl font-bold tracking-tighter md:text-4xl/tight">Simple, Transparent Pricing
+                        </h2>
+                        <p
+                            class="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                            Choose the plan that fits your hospital's needs.
+                        </p>
+                    </div>
+                </div>
+                <div class="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 mt-8">
+                    <mat-card *ngFor="let plan of pricingPlans"
+                        [ngClass]="{'border-teal-600 shadow-md': plan.featured}">
+                        <mat-card-content>
+                            <div *ngIf="plan.featured"
+                                class="inline-block rounded-full bg-teal-100 px-3 py-1 text-xs text-teal-800 self-start mb-4">
+                                Most Popular
+                            </div>
+                            <h3 class="text-2xl font-bold">{{plan.name}}</h3>
+                            <div class="mt-4 flex items-baseline">
+                                <span class="text-4xl font-bold">{{plan.price}}</span>
+                                <span class="ml-1 text-gray-500" *ngIf="plan.price !== 'Custom'">/month</span>
+                            </div>
+                            <p class="mt-2 text-gray-500">{{plan.description}}</p>
+                            <ul class="mt-6 space-y-3">
+                                <li *ngFor="let feature of plan.features" class="flex items-center">
+                                    <mat-icon class="mr-2 h-5 w-5 text-teal-600">check</mat-icon>
+                                    {{feature}}
+                                </li>
+                            </ul>
+                            <button mat-flat-button color="primary" class="mt-8 w-full" *ngIf="plan.featured">Get
+                                Started</button>
+                            <button mat-stroked-button class="mt-8 w-full" *ngIf="!plan.featured">Get Started</button>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="w-full py-12 md:py-24 lg:py-32 bg-teal-50">
+            <div class="container px-4 md:px-6">
+                <div class="flex flex-col items-center justify-center space-y-4 text-center">
+                    <div class="space-y-2">
+                        <div class="inline-block rounded-lg bg-teal-100 px-3 py-1 text-sm text-teal-800">Testimonials
+                        </div>
+                        <h2 class="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+                            Trusted by Hospitals Worldwide
+                        </h2>
+                        <p
+                            class="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                            See what our customers have to say about Care-Connect.
+                        </p>
+                    </div>
+                </div>
+                <div class="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
+                    <mat-card *ngFor="let testimonial of testimonials">
+                        <mat-card-content>
+                            <div class="flex items-center space-x-4">
+                                <img [src]="testimonial.avatar" [alt]="testimonial.name" width="48" height="48"
+                                    class="rounded-full">
+                                <div>
+                                    <h3 class="font-bold">{{testimonial.name}}</h3>
+                                    <p class="text-sm text-gray-500">{{testimonial.role}}</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex">
+                                <mat-icon *ngFor="let i of [1,2,3,4,5]"
+                                    [ngClass]="{'text-teal-600': i <= testimonial.rating, 'text-gray-300': i > testimonial.rating}">
+                                    star
+                                </mat-icon>
+                            </div>
+                            <blockquote class="mt-4 text-gray-500">"{{testimonial.quote}}"</blockquote>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="w-full py-12 md:py-24 lg:py-32 bg-teal-600 text-white">
+            <div class="container px-4 md:px-6">
+                <div class="flex flex-col items-center justify-center space-y-4 text-center">
+                    <div class="space-y-2">
+                        <h2 class="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+                            Ready to Transform Your Hospital Management?
+                        </h2>
+                        <p class="max-w-[900px] md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                            Join thousands of hospitals that trust Care-Connect for their healthcare management needs.
+                        </p>
+                    </div>
+                    <div class="flex flex-col gap-2 min-[400px]:flex-row">
+                        <button mat-flat-button color="accent" class="px-8 py-2">Start Free Trial</button>
+                        <button mat-stroked-button class="px-8 py-2 border-white text-white hover:bg-teal-700">Contact
+                            Sales</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <app-footer></app-footer>
+</div>

@@ -1,0 +1,168 @@
+<div class="flex min-h-screen flex-col">
+    <app-header [isDashboard]="true"></app-header>
+
+    <main class="flex-1 py-8">
+        <div class="container px-4 md:px-6">
+            <div class="flex flex-col gap-4 md:gap-8">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-3xl font-bold">Hospital Dashboard</h1>
+                    <button mat-flat-button color="primary" routerLink="/dashboard/appointments/new">New
+                        Appointment</button>
+                </div>
+
+                <mat-tab-group [(selectedIndex)]="selectedTab" animationDuration="0ms">
+                    <mat-tab label="Overview">
+                        <div class="py-4">
+                            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                <mat-card>
+                                    <mat-card-content>
+                                        <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <div class="space-y-1">
+                                                <p class="text-sm font-medium leading-none">Total Patients</p>
+                                                <p class="text-2xl font-bold">2,543</p>
+                                            </div>
+                                            <mat-icon class="h-6 w-6 text-teal-600">people</mat-icon>
+                                        </div>
+                                        <p class="text-xs text-gray-500">+12% from last month</p>
+                                    </mat-card-content>
+                                </mat-card>
+
+                                <mat-card>
+                                    <mat-card-content>
+                                        <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <div class="space-y-1">
+                                                <p class="text-sm font-medium leading-none">Active Doctors</p>
+                                                <p class="text-2xl font-bold">128</p>
+                                            </div>
+                                            <mat-icon class="h-6 w-6 text-teal-600">medical_services</mat-icon>
+                                        </div>
+                                        <p class="text-xs text-gray-500">+4 new doctors this month</p>
+                                    </mat-card-content>
+                                </mat-card>
+
+                                <mat-card>
+                                    <mat-card-content>
+                                        <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <div class="space-y-1">
+                                                <p class="text-sm font-medium leading-none">Appointments Today</p>
+                                                <p class="text-2xl font-bold">42</p>
+                                            </div>
+                                            <mat-icon class="h-6 w-6 text-teal-600">event</mat-icon>
+                                        </div>
+                                        <p class="text-xs text-gray-500">8 appointments remaining</p>
+                                    </mat-card-content>
+                                </mat-card>
+
+                                <mat-card>
+                                    <mat-card-content>
+                                        <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <div class="space-y-1">
+                                                <p class="text-sm font-medium leading-none">Revenue This Month</p>
+                                                <p class="text-2xl font-bold">$48,294</p>
+                                            </div>
+                                            <mat-icon class="h-6 w-6 text-teal-600">attach_money</mat-icon>
+                                        </div>
+                                        <p class="text-xs text-gray-500">+14.5% from last month</p>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+
+                            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+                                <mat-card class="col-span-4">
+                                    <mat-card-header>
+                                        <mat-card-title>Recent Appointments</mat-card-title>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        <div class="space-y-4">
+                                            <div *ngFor="let appointment of recentAppointments; let last = last"
+                                                class="flex items-center justify-between"
+                                                [ngClass]="{'border-b pb-4': !last}">
+                                                <div class="flex items-center space-x-4">
+                                                    <div class="space-y-1">
+                                                        <p class="font-medium">{{appointment.patientName}}</p>
+                                                        <p class="text-sm text-gray-500">
+                                                            {{appointment.time}} with Dr. {{appointment.doctor}}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div [ngClass]="getStatusClass(appointment.status)"
+                                                    class="rounded-full px-2 py-1 text-xs">
+                                                    {{appointment.status}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </mat-card-content>
+                                </mat-card>
+
+                                <mat-card class="col-span-3">
+                                    <mat-card-header>
+                                        <mat-card-title>Doctor Availability</mat-card-title>
+                                        <mat-card-subtitle>Current doctor availability status</mat-card-subtitle>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        <div class="space-y-4">
+                                            <div *ngFor="let doctor of doctorAvailability"
+                                                class="flex items-center justify-between">
+                                                <div class="flex items-center space-x-4">
+                                                    <div [ngClass]="getAvailabilityClass(doctor.status)"
+                                                        class="h-2 w-2 rounded-full"></div>
+                                                    <div>
+                                                        <p class="font-medium">Dr. {{doctor.name}}</p>
+                                                        <p class="text-sm text-gray-500">{{doctor.department}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="text-sm font-medium">{{doctor.status}}</div>
+                                            </div>
+                                        </div>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Patients">
+                        <div class="py-4">
+                            <mat-card>
+                                <mat-card-header>
+                                    <mat-card-title>Patient Management</mat-card-title>
+                                    <mat-card-subtitle>View and manage your patients</mat-card-subtitle>
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <p>Patient management content will be displayed here.</p>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Doctors">
+                        <div class="py-4">
+                            <mat-card>
+                                <mat-card-header>
+                                    <mat-card-title>Doctor Management</mat-card-title>
+                                    <mat-card-subtitle>View and manage your doctors</mat-card-subtitle>
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <p>Doctor management content will be displayed here.</p>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Appointments">
+                        <div class="py-4">
+                            <mat-card>
+                                <mat-card-header>
+                                    <mat-card-title>Appointment Management</mat-card-title>
+                                    <mat-card-subtitle>View and manage appointments</mat-card-subtitle>
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <p>Appointment management content will be displayed here.</p>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </main>
+</div>

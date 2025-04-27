@@ -1,1 +1,26 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 /* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-mdc-button.mat-primary {
+  --mdc-filled-button-container-color: #0D9488;
+  --mdc-filled-button-label-text-color: white;
+}
+
+.mat-mdc-button.mat-accent {
+  --mdc-filled-button-container-color: white;
+  --mdc-filled-button-label-text-color: #0D9488;
+}
+
+.mat-mdc-card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.mat-mdc-card-subtitle {
+  color: rgba(0, 0, 0, 0.6);
+}
