@@ -1,41 +1,41 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
-import { ApiResponse, PatientRequest } from '../models/api-types';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  constructor(private apiService: ApiService) {}
+  private apiUrl = environment.apiUrl;
 
-  // Get all patients
-  getAllPatients(): Observable<ApiResponse> {
-    return this.apiService.get<ApiResponse>('/patients');
+  constructor(private http: HttpClient) {}
+
+  getAllPatients(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/patients`);
   }
 
-  // Get patient by ID
-  getPatientById(patientId: number): Observable<ApiResponse> {
-    return this.apiService.get<ApiResponse>(`/patients/${patientId}`);
+  getPatientById(patientId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/patients/${patientId}`);
   }
 
-  // Register a new patient
-  registerPatient(patientData: PatientRequest): Observable<ApiResponse> {
-    return this.apiService.post<PatientRequest, ApiResponse>('/patients', patientData);
+  registerPatient(patientData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/patients`, patientData);
   }
 
-  // Update patient information
-  updatePatient(patientId: number, patientData: PatientRequest): Observable<ApiResponse> {
-    return this.apiService.put<PatientRequest, ApiResponse>(`/patients/${patientId}`, patientData);
+  updatePatient(patientId: number, patientData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/patients/${patientId}`, patientData);
   }
 
-  // Get patient illness history
-  getPatientIllnessHistory(patientId: number): Observable<ApiResponse> {
-    return this.apiService.get<ApiResponse>(`/illness/patients/${patientId}`);
+  getPatientIllnessHistory(patientId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/illness/patients/${patientId}`);
   }
 
-  // Save patient illness
-  savePatientIllness(patientId: number, illnessData: any): Observable<ApiResponse> {
-    return this.apiService.post<any, ApiResponse>(`/illness/patients/${patientId}`, illnessData);
+  getIllnessById(patientId: number, illnessId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/illness/patients/${patientId}/${illnessId}`);
+  }
+
+  savePatientIllness(patientId: number, illnessData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/illness/patients/${patientId}`, illnessData);
   }
 }

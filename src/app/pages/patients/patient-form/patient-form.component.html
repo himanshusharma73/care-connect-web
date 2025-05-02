@@ -1,237 +1,238 @@
-<div class="container px-4 py-8 md:px-6">
-    <div class="flex flex-col gap-4 md:gap-8">
-        <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">{{isEditing ? 'Edit Patient' : 'Register New Patient'}}</h1>
-            <button mat-stroked-button routerLink="/dashboard/patients">Back to Patients</button>
-        </div>
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-6 border-b">
+                <h1 class="text-xl font-bold">{{ isEditing ? 'Edit Patient' : 'Register New Patient' }}</h1>
+                <p class="text-sm text-gray-500">
+                    {{ isEditing ? 'Update patient information in the system' : 'Enter patient details to register them
+                    in the system' }}
+                </p>
+            </div>
 
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>{{isEditing ? 'Edit Patient' : 'Register New Patient'}}</mat-card-title>
-                <mat-card-subtitle>
-                    {{isEditing ? 'Update patient information in the system' : 'Enter patient details to register them
-                    in the system'}}
-                </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                <div *ngIf="isLoading" class="flex justify-center py-8">
-                    <mat-spinner></mat-spinner>
-                </div>
+            <div class="p-6">
+                <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <!-- Personal Information Section -->
+                    <div>
+                        <h2 class="text-lg font-semibold mb-4">Personal Information</h2>
 
-                <form *ngIf="!isLoading" [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="space-y-6">
-                    <!-- Personal Information -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-medium">Personal Information</h3>
+                        <div formGroupName="name" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- First Name -->
+                            <div class="form-field">
+                                <label class="form-label">
+                                    First Name <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="firstName" class="form-input"
+                                    [ngClass]="{'input-error': isNameFieldInvalid('firstName')}"
+                                    placeholder="First Name" required />
+                                <div *ngIf="isNameFieldInvalid('firstName')" class="error-message">
+                                    First name is required and must be at least 3 characters.
+                                </div>
+                            </div>
 
-                        <div formGroupName="name" class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <mat-form-field appearance="outline">
-                                <mat-label>First Name</mat-label>
-                                <input matInput formControlName="firstName" required>
-                                <mat-error *ngIf="patientForm.get('name.firstName')?.hasError('required')">
-                                    First name is required
-                                </mat-error>
-                                <mat-error *ngIf="patientForm.get('name.firstName')?.hasError('minlength')">
-                                    First name must be at least 3 characters
-                                </mat-error>
-                            </mat-form-field>
+                            <!-- Middle Name -->
+                            <div class="form-field">
+                                <label class="form-label">Middle Name</label>
+                                <input type="text" formControlName="middleName" class="form-input"
+                                    placeholder="Middle Name" />
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Middle Name</mat-label>
-                                <input matInput formControlName="middleName">
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Last Name</mat-label>
-                                <input matInput formControlName="lastName" required>
-                                <mat-error *ngIf="patientForm.get('name.lastName')?.hasError('required')">
-                                    Last name is required
-                                </mat-error>
-                                <mat-error *ngIf="patientForm.get('name.lastName')?.hasError('minlength')">
-                                    Last name must be at least 3 characters
-                                </mat-error>
-                            </mat-form-field>
+                            <!-- Last Name -->
+                            <div class="form-field">
+                                <label class="form-label">
+                                    Last Name <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="lastName" class="form-input"
+                                    [ngClass]="{'input-error': isNameFieldInvalid('lastName')}" placeholder="Last Name"
+                                    required />
+                                <div *ngIf="isNameFieldInvalid('lastName')" class="error-message">
+                                    Last name is required and must be at least 3 characters.
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Date of Birth</mat-label>
-                                <input matInput [matDatepicker]="picker" formControlName="birthdate" required>
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                                <mat-error *ngIf="patientForm.get('birthdate')?.hasError('required')">
-                                    Date of birth is required
-                                </mat-error>
-                            </mat-form-field>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <!-- Date of Birth -->
+                            <div class="form-field">
+                                <label class="form-label">
+                                    Date of Birth <span class="text-red-500">*</span>
+                                </label>
+                                <input type="date" formControlName="birthdate" class="form-input"
+                                    [max]="today"
+                                    [ngClass]="{'input-error': isFieldInvalid('birthdate')}" required />
+                                <div *ngIf="isFieldInvalid('birthdate')" class="error-message">
+                                    Date of birth is required.
+                                </div>
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Gender</mat-label>
-                                <mat-select formControlName="gender" required>
-                                    <mat-option value="Male">Male</mat-option>
-                                    <mat-option value="Female">Female</mat-option>
-                                    <mat-option value="Other">Other</mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="patientForm.get('gender')?.hasError('required')">
-                                    Gender is required
-                                </mat-error>
-                            </mat-form-field>
+                            <!-- Gender -->
+                            <div class="form-field">
+                                <label class="form-label">
+                                    Gender <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="gender" class="form-select"
+                                    [ngClass]="{'input-error': isFieldInvalid('gender')}" required>
+                                    <option [ngValue]="''">Select gender</option>
+                                    <option *ngFor="let gender of genders" [value]="gender">{{ gender }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('gender')" class="error-message">
+                                    Gender is required.
+                                </div>
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Blood Group</mat-label>
-                                <mat-select formControlName="bloodGroup" required>
-                                    <mat-option value="A+">A+</mat-option>
-                                    <mat-option value="A-">A-</mat-option>
-                                    <mat-option value="B+">B+</mat-option>
-                                    <mat-option value="B-">B-</mat-option>
-                                    <mat-option value="AB+">AB+</mat-option>
-                                    <mat-option value="AB-">AB-</mat-option>
-                                    <mat-option value="O+">O+</mat-option>
-                                    <mat-option value="O-">O-</mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="patientForm.get('bloodGroup')?.hasError('required')">
-                                    Blood group is required
-                                </mat-error>
-                            </mat-form-field>
+                            <!-- Blood Group -->
+                            <div class="form-field">
+                                <label class="form-label">
+                                    Blood Group <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="bloodGroup" class="form-select"
+                                    [ngClass]="{'input-error': isFieldInvalid('bloodGroup')}" required>
+                                    <option [ngValue]="''">Select blood group</option>
+                                    <option *ngFor="let group of bloodGroups" [value]="group">{{ group }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('bloodGroup')" class="error-message">
+                                    Blood group is required.
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Email</mat-label>
-                                <input matInput type="email" formControlName="email" required>
-                                <mat-error *ngIf="patientForm.get('email')?.hasError('required')">
-                                    Email is required
-                                </mat-error>
-                                <mat-error *ngIf="patientForm.get('email')?.hasError('email')">
-                                    Please enter a valid email address
-                                </mat-error>
-                            </mat-form-field>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <!-- Email -->
+                            <div class="form-field">
+                                <label class="form-label">
+                                    Email <span class="text-red-500">*</span>
+                                </label>
+                                <input type="email" formControlName="email" class="form-input" placeholder="Email"
+                                    [ngClass]="{'input-error': isFieldInvalid('email')}" required />
+                                <div *ngIf="isFieldInvalid('email')" class="error-message">
+                                    Please enter a valid email address.
+                                </div>
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Mobile Number</mat-label>
-                                <input matInput type="number" formControlName="mobileNo">
-                            </mat-form-field>
+                            <!-- Mobile Number -->
+                            <div class="form-field">
+                                <label class="form-label">Mobile Number</label>
+                                <input type="tel" formControlName="mobileNo" class="form-input"
+                                    placeholder="Mobile Number"
+                                    [ngClass]="{'input-error': isFieldInvalid('mobileNo')}" />
+                                <div *ngIf="isFieldInvalid('mobileNo')" class="error-message">
+                                    Please enter a valid 10-digit mobile number.
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Marital Status</mat-label>
-                                <mat-select formControlName="maritalStatus" required>
-                                    <mat-option value="Single">Single</mat-option>
-                                    <mat-option value="Married">Married</mat-option>
-                                    <mat-option value="Divorced">Divorced</mat-option>
-                                    <mat-option value="Widowed">Widowed</mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="patientForm.get('maritalStatus')?.hasError('required')">
-                                    Marital status is required
-                                </mat-error>
-                            </mat-form-field>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <!-- Marital Status -->
+                            <div class="form-field">
+                                <label class="form-label">
+                                    Marital Status <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="maritalStatus" class="form-select"
+                                    [ngClass]="{'input-error': isFieldInvalid('maritalStatus')}" required>
+                                    <option [ngValue]="''">Select marital status</option>
+                                    <option *ngFor="let status of maritalStatuses" [value]="status">{{ status }}
+                                    </option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('maritalStatus')" class="error-message">
+                                    Marital status is required.
+                                </div>
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Occupation</mat-label>
-                                <input matInput formControlName="occupation" required>
-                                <mat-error *ngIf="patientForm.get('occupation')?.hasError('required')">
-                                    Occupation is required
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <!-- Address -->
-                    <div class="space-y-4" formGroupName="address">
-                        <h3 class="text-lg font-medium">Address</h3>
-
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Street</mat-label>
-                            <input matInput formControlName="street" required>
-                            <mat-error *ngIf="patientForm.get('address.street')?.hasError('required')">
-                                Street is required
-                            </mat-error>
-                        </mat-form-field>
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>City</mat-label>
-                                <input matInput formControlName="city" required>
-                                <mat-error *ngIf="patientForm.get('address.city')?.hasError('required')">
-                                    City is required
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>State</mat-label>
-                                <input matInput formControlName="state" required>
-                                <mat-error *ngIf="patientForm.get('address.state')?.hasError('required')">
-                                    State is required
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Postal Code</mat-label>
-                                <input matInput formControlName="postalCode" required>
-                                <mat-error *ngIf="patientForm.get('address.postalCode')?.hasError('required')">
-                                    Postal code is required
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Country</mat-label>
-                                <input matInput formControlName="country" required>
-                                <mat-error *ngIf="patientForm.get('address.country')?.hasError('required')">
-                                    Country is required
-                                </mat-error>
-                            </mat-form-field>
+                            <!-- Occupation -->
+                            <div class="form-field">
+                                <label class="form-label">Occupation</label>
+                                <input type="text" formControlName="occupation" class="form-input"
+                                    placeholder="Occupation" />
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Medical Information -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-medium">Medical Information</h3>
+                    <!-- Address Section -->
+                    <div>
+                        <h2 class="text-lg font-semibold mb-4">Address</h2>
 
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Emergency Contact</mat-label>
-                                <input matInput type="number" formControlName="emergencyContactNumber">
-                            </mat-form-field>
+                        <div formGroupName="address" class="space-y-4">
+                            <!-- Street -->
+                            <div class="form-field">
+                                <label class="form-label">
+                                    Street <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="street" class="form-input" placeholder="Street"
+                                    [ngClass]="{'input-error': isAddressFieldInvalid('street')}" required />
+                                <div *ngIf="isAddressFieldInvalid('street')" class="error-message">
+                                    Street is required.
+                                </div>
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Preferred Language</mat-label>
-                                <input matInput formControlName="preferredLanguage" required>
-                                <mat-error *ngIf="patientForm.get('preferredLanguage')?.hasError('required')">
-                                    Preferred language is required
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- City -->
+                                <div class="form-field">
+                                    <label class="form-label">
+                                        City <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" formControlName="city" class="form-input" placeholder="City"
+                                        [ngClass]="{'input-error': isAddressFieldInvalid('city')}" required />
+                                    <div *ngIf="isAddressFieldInvalid('city')" class="error-message">
+                                        City is required.
+                                    </div>
+                                </div>
 
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <mat-checkbox formControlName="isSmoker">Smoker</mat-checkbox>
-                            <mat-checkbox formControlName="isAlcoholic">Alcoholic</mat-checkbox>
+                                <!-- State -->
+                                <div class="form-field">
+                                    <label class="form-label">
+                                        State <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" formControlName="state" class="form-input" placeholder="State"
+                                        [ngClass]="{'input-error': isAddressFieldInvalid('state')}" required />
+                                    <div *ngIf="isAddressFieldInvalid('state')" class="error-message">
+                                        State is required.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Postal Code -->
+                                <div class="form-field">
+                                    <label class="form-label">
+                                        Postal Code <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" formControlName="postalCode" class="form-input"
+                                        placeholder="Postal Code"
+                                        [ngClass]="{'input-error': isAddressFieldInvalid('postalCode')}" required />
+                                    <div *ngIf="isAddressFieldInvalid('postalCode')" class="error-message">
+                                        Postal code is required.
+                                    </div>
+                                </div>
+
+                                <!-- Country -->
+                                <div class="form-field">
+                                    <label class="form-label">
+                                        Country <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" formControlName="country" class="form-input"
+                                        placeholder="Country"
+                                        [ngClass]="{'input-error': isAddressFieldInvalid('country')}" required />
+                                    <div *ngIf="isAddressFieldInvalid('country')" class="error-message">
+                                        Country is required.
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Insurance Information -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-medium">Insurance Information</h3>
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <mat-checkbox formControlName="hasInsurance">Has Insurance</mat-checkbox>
-                            <mat-checkbox formControlName="isMedicaidEligible">Medicaid Eligible</mat-checkbox>
-                            <mat-checkbox formControlName="selfPay">Self Pay</mat-checkbox>
-                        </div>
-                    </div>
-
+                    <!-- Form Actions -->
                     <div class="flex justify-end space-x-4">
-                        <button type="button" mat-stroked-button routerLink="/dashboard/patients"
+                        <button type="button" (click)="router.navigate(['/dashboard/patients'])"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
                             [disabled]="isLoading">
                             Cancel
                         </button>
-                        <button type="submit" mat-flat-button color="primary"
-                            [disabled]="patientForm.invalid || isLoading">
-                            {{isLoading ? 'Saving...' : isEditing ? 'Update Patient' : 'Register Patient'}}
+                        <button type="submit" [disabled]="isLoading"
+                            class="px-4 py-2 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700 disabled:opacity-50">
+                            {{ isLoading ? 'Saving...' : (isEditing ? 'Update Patient' : 'Register Patient') }}
                         </button>
                     </div>
                 </form>
-            </mat-card-content>
-        </mat-card>
+            </div>
+        </div>
     </div>
 </div>

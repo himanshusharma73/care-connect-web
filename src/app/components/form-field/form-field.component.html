@@ -1,0 +1,12 @@
+<div class="form-field">
+    <label *ngIf="label" class="form-label">
+        {{ label }}
+        <span *ngIf="required" class="required-mark">*</span>
+    </label>
+    <div class="input-container">
+        <ng-content></ng-content>
+    </div>
+    <div *ngIf="showError && errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+</div>

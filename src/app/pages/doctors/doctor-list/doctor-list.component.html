@@ -1,0 +1,96 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col gap-4 md:gap-8">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold">Doctors</h1>
+            <a routerLink="/dashboard/doctors/new"
+                class="px-4 py-2 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700">
+                Add New Doctor
+            </a>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-6 border-b">
+                <h2 class="text-lg font-semibold">Doctor Management</h2>
+                <p class="text-sm text-gray-500">View and manage all doctors in the system</p>
+            </div>
+
+            <div class="p-6">
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <!-- <div class="flex-1">
+                        <app-search-bar placeholder="Search doctors..." [value]="searchTerm"
+                            (search)="onSearch($event)"></app-search-bar>
+                    </div> -->
+
+                    <div class="w-full md:w-64">
+                        <!-- <select
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            [(ngModel)]="selectedSpecialization" (change)="onSpecializationChange($event.target.value)">
+                            <option value="">All Specializations</option>
+                            <option *ngFor="let spec of specializations" [value]="spec">{{ spec }}</option>
+                        </select> -->
+                    </div>
+
+                    <button *ngIf="searchTerm || selectedSpecialization" (click)="clearFilters()"
+                        class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
+                        Clear Filters
+                    </button>
+                </div>
+
+                <div *ngIf="isLoading" class="flex h-40 items-center justify-center">
+                    <p>Loading doctors...</p>
+                </div>
+
+                <div *ngIf="!isLoading && filteredDoctors.length === 0" class="flex h-40 items-center justify-center">
+                    <p>No doctors found.</p>
+                </div>
+
+                <div *ngIf="!isLoading && filteredDoctors.length > 0" class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Name</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Specialization</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Gender</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Email</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr *ngFor="let doctor of filteredDoctors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium">Dr. {{ doctor.name.firstName }} {{ doctor.name.lastName }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ doctor.specialization }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ doctor.gender }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ doctor.email }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex space-x-2">
+                                        <a [routerLink]="['/dashboard/doctors', doctor.doctorId]"
+                                            class="px-3 py-1 text-xs font-medium rounded-md border border-gray-300 hover:bg-gray-50">
+                                            View
+                                        </a>
+                                        <a [routerLink]="['/dashboard/doctors', doctor.doctorId, 'edit']"
+                                            class="px-3 py-1 text-xs font-medium rounded-md border border-gray-300 hover:bg-gray-50">
+                                            Edit
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

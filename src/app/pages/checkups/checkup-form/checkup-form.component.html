@@ -1,0 +1,107 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-6 border-b">
+                <h1 class="text-xl font-bold">Patient Checkup</h1>
+                <p class="text-sm text-gray-500">Record patient checkup details and prescriptions</p>
+            </div>
+
+            <div class="p-6">
+                <form [formGroup]="checkupForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <label class="form-label">
+                                Patient <span class="text-red-500">*</span>
+                            </label>
+                            <select formControlName="patientId" class="form-select"
+                                [ngClass]="{'input-error': isFieldInvalid('patientId')}" required>
+                                <option [ngValue]="null">Select patient</option>
+                                <option *ngFor="let patient of patients" [value]="patient.id">
+                                    {{ patient.name.firstName }} {{ patient.name.lastName }}
+                                </option>
+                            </select>
+                            <div *ngIf="isFieldInvalid('patientId')" class="error-message">
+                                Please select a patient.
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">
+                                Doctor <span class="text-red-500">*</span>
+                            </label>
+                            <select formControlName="doctorId" class="form-select"
+                                [ngClass]="{'input-error': isFieldInvalid('doctorId')}" required>
+                                <option [ngValue]="null">Select doctor</option>
+                                <option *ngFor="let doctor of doctors" [value]="doctor.id">
+                                    Dr. {{ doctor.name.firstName }} {{ doctor.name.lastName }} - {{
+                                    doctor.specialization }}
+                                </option>
+                            </select>
+                            <div *ngIf="isFieldInvalid('doctorId')" class="error-message">
+                                Please select a doctor.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <label class="form-label">
+                                Appointment Date <span class="text-red-500">*</span>
+                            </label>
+                            <input type="date" formControlName="appointmentDate" class="form-input"
+                                [ngClass]="{'input-error': isFieldInvalid('appointmentDate')}" required />
+                            <div *ngIf="isFieldInvalid('appointmentDate')" class="error-message">
+                                Please select an appointment date.
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Status</label>
+                            <select formControlName="checkupStatus" class="form-select">
+                                <option *ngFor="let status of checkupStatuses" [value]="status">
+                                    {{ status }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">
+                            Prescription <span class="text-red-500">*</span>
+                        </label>
+                        <textarea formControlName="prescription" rows="4" class="form-input"
+                            placeholder="Enter prescription details"
+                            [ngClass]="{'input-error': isFieldInvalid('prescription')}" required></textarea>
+                        <div *ngIf="isFieldInvalid('prescription')" class="error-message">
+                            Prescription is required.
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">
+                            Additional Comments <span class="text-red-500">*</span>
+                        </label>
+                        <textarea formControlName="extraComment" rows="4" class="form-input"
+                            placeholder="Enter any additional comments or notes"
+                            [ngClass]="{'input-error': isFieldInvalid('extraComment')}" required></textarea>
+                        <div *ngIf="isFieldInvalid('extraComment')" class="error-message">
+                            Additional comments are required.
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" (click)="router.navigate(['/dashboard/checkups'])"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+                            [disabled]="isLoading">
+                            Cancel
+                        </button>
+                        <button type="submit" [disabled]="checkupForm.invalid || isLoading"
+                            class="px-4 py-2 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700 disabled:opacity-50">
+                            {{ isLoading ? 'Submitting...' : 'Submit Checkup' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
