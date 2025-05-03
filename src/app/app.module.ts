@@ -38,6 +38,8 @@ import { DoctorListComponent } from './pages/doctors/doctor-list/doctor-list.com
 import { FormFieldComponent } from './components/form-field/form-field.component';
 import { CheckupFormComponent } from './pages/checkups/checkup-form/checkup-form.component';
 import { ViewPatientComponent } from './pages/patients/view-patient/view-patient.component';
+import { DoctorViewComponent } from './pages/doctors/doctor-view/doctor-view.component';
+import { DoctorFormComponent } from './pages/doctors/doctor-form/doctor-form.component';
 
 
 
@@ -58,7 +60,9 @@ import { ViewPatientComponent } from './pages/patients/view-patient/view-patient
     AppointmentFormComponent,
     DoctorListComponent,
     FormFieldComponent,
-    ViewPatientComponent
+    ViewPatientComponent,
+    DoctorViewComponent,
+    DoctorFormComponent
   ],
   imports: [
     BrowserModule,

@@ -18,6 +18,13 @@ export class AppointmentService {
   getAppointmentById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
+ getAppointmentsByPatientId(patientId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/patient/${patientId}`);
+  }
+
+  getAppointmentsByDoctorId(doctorId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/doctor/${doctorId}`);
+  }
 
   bookAppointment(appointmentData: any): Observable<any> {
     return this.http.post(this.apiUrl, appointmentData);

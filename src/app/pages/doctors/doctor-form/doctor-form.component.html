@@ -2,13 +2,13 @@
     <div class="max-w-4xl mx-auto">
         <!-- Back button -->
         <div class="mb-4">
-            <button (click)="router.navigate(['/dashboard/patients'])"
+            <button (click)="router.navigate(['/dashboard/doctors'])"
                 class="flex items-center text-sm text-gray-600 hover:text-teal-600 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                Back to Patients
+                Back to Doctors
             </button>
         </div>
 
@@ -18,7 +18,7 @@
                 <div
                     class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-teal-600 border-r-transparent">
                 </div>
-                <p class="mt-2 text-gray-600">Loading patient information...</p>
+                <p class="mt-2 text-gray-600">Loading doctor information...</p>
             </div>
         </div>
 
@@ -30,7 +30,7 @@
                 <p class="text-teal-100 mt-1">{{ formSubtitle }}</p>
             </div>
 
-            <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="p-6">
+            <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()" class="p-6">
                 <!-- Personal Information Section -->
                 <div class="mb-8">
                     <div class="flex items-center mb-4">
@@ -96,63 +96,57 @@
                                 </div>
                             </div>
 
-                            <!-- Birthdate -->
+                            <!-- Specialization -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    Date of Birth <span class="text-red-500">*</span>
+                                    Specialization <span class="text-red-500">*</span>
                                 </label>
-                                <input type="date" formControlName="birthdate" [max]="maxDate"
-                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('birthdate'), 'border-gray-300': !isFieldInvalid('birthdate')}" />
-                                <div *ngIf="isFieldInvalid('birthdate')" class="text-red-500 text-xs mt-1">
-                                    Date of birth is required
-                                </div>
-                                <div *ngIf="patientForm.get('birthdate')?.value" class="text-gray-500 text-xs mt-1">
-                                    Age: {{ calculateAge(patientForm.get('birthdate')?.value) }} years
+                                <select formControlName="specialization"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('specialization'), 'border-gray-300': !isFieldInvalid('specialization')}">
+                                    <option [ngValue]="''">Select specialization</option>
+                                    <option *ngFor="let spec of specializations" [value]="spec">{{ spec }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('specialization')" class="text-red-500 text-xs mt-1">
+                                    Specialization is required
                                 </div>
                             </div>
 
-                            <!-- Blood Group -->
+                            <!-- License Number -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    Blood Group <span class="text-red-500">*</span>
+                                    License Number <span class="text-red-500">*</span>
                                 </label>
-                                <select formControlName="bloodGroup"
-                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
-                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('bloodGroup'), 'border-gray-300': !isFieldInvalid('bloodGroup')}">
-                                    <option [ngValue]="''">Select blood group</option>
-                                    <option *ngFor="let group of bloodGroups" [value]="group">{{ group }}</option>
-                                </select>
-                                <div *ngIf="isFieldInvalid('bloodGroup')" class="text-red-500 text-xs mt-1">
-                                    Blood group is required
+                                <input type="text" formControlName="licenseNumber"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('licenseNumber'), 'border-gray-300': !isFieldInvalid('licenseNumber')}"
+                                    placeholder="Enter license number" />
+                                <div *ngIf="isFieldInvalid('licenseNumber')" class="text-red-500 text-xs mt-1">
+                                    License number is required
                                 </div>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Marital Status -->
+                            <!-- Join Date -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    Marital Status <span class="text-red-500">*</span>
+                                    Join Date <span class="text-red-500">*</span>
                                 </label>
-                                <select formControlName="maritalStatus"
-                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
-                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('maritalStatus'), 'border-gray-300': !isFieldInvalid('maritalStatus')}">
-                                    <option [ngValue]="''">Select marital status</option>
-                                    <option *ngFor="let status of maritalStatuses" [value]="status">{{ status }}
-                                    </option>
-                                </select>
-                                <div *ngIf="isFieldInvalid('maritalStatus')" class="text-red-500 text-xs mt-1">
-                                    Marital status is required
+                                <input type="date" formControlName="joinDate"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('joinDate'), 'border-gray-300': !isFieldInvalid('joinDate')}" />
+                                <div *ngIf="isFieldInvalid('joinDate')" class="text-red-500 text-xs mt-1">
+                                    Join date is required
                                 </div>
                             </div>
 
-                            <!-- Occupation -->
+                            <!-- Availability -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
-                                <input type="text" formControlName="occupation"
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Availability</label>
+                                <input type="text" formControlName="availability"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                                    placeholder="Enter occupation" />
+                                    placeholder="e.g., Mon-Fri, 9AM-5PM" />
                             </div>
                         </div>
                     </div>
@@ -166,7 +160,7 @@
                     </div>
 
                     <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Email -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -192,14 +186,6 @@
                                     Please enter a valid 10-digit mobile number
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Emergency Contact -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Emergency Contact</label>
-                            <input type="tel" formControlName="emergencyContact"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                                placeholder="Enter emergency contact number" />
                         </div>
                     </div>
                 </div>
@@ -288,24 +274,9 @@
                     </div>
                 </div>
 
-                <!-- Medical History Section -->
-                <div class="mb-8">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-teal-600 h-6 w-1 rounded mr-2"></div>
-                        <h2 class="text-lg font-semibold text-gray-800">Medical History</h2>
-                    </div>
-
-                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Medical Notes</label>
-                        <textarea formControlName="medicalHistory" rows="4"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                            placeholder="Enter any relevant medical history or notes"></textarea>
-                    </div>
-                </div>
-
                 <!-- Form Actions -->
                 <div class="flex justify-end space-x-4 mt-8">
-                    <button type="button" (click)="router.navigate(['/dashboard/patients'])"
+                    <button type="button" (click)="router.navigate(['/dashboard/doctors'])"
                         class="px-6 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all shadow-sm"
                         [disabled]="isSubmitting">
                         Cancel

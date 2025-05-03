@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PatientService } from '../../../services/patient.service';
+import { DoctorService } from '../../../services/doctor.service';
 import { AppointmentService } from '../../../services/appointment.service';
 import { CheckupService } from '../../../services/checkup.service';
 
 @Component({
-  selector: 'app-view-patient',
-  templateUrl: './view-patient.component.html',
-  styleUrls: ['./view-patient.component.scss']
+  selector: 'app-doctor-view',
+  templateUrl: './doctor-view.component.html',
+  styleUrls: ['./doctor-view.component.scss']
 })
-export class ViewPatientComponent implements OnInit {
-  patientId: number;
-  patient: any = null;
-  illnesses: any[] = [];
+export class DoctorViewComponent implements OnInit {
+  doctorId: number;
+  doctor: any = null;
   appointments: any[] = [];
   checkups: any[] = [];
   isLoading: boolean = true;
@@ -21,58 +20,44 @@ export class ViewPatientComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public router: Router,
-    private patientService: PatientService,
+    private doctorService: DoctorService,
     private appointmentService: AppointmentService,
     private checkupService: CheckupService
   ) {
-    this.patientId = 0;
+    this.doctorId = 0;
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.patientId = +params['id'];
-      this.loadPatientData();
+      this.doctorId = +params['id'];
+      this.loadDoctorData();
     });
   }
 
-  loadPatientData(): void {
+  loadDoctorData(): void {
     this.isLoading = true;
     
-    // Load patient details
-    this.patientService.getPatientById(this.patientId).subscribe({
+    // Load doctor details
+    this.doctorService.getDoctorById(this.doctorId).subscribe({
       next: (response) => {
         if (response.data) {
-          this.patient = response.data;
+          this.doctor = response.data;
           
           // Load related data
-          this.loadIllnesses();
           this.loadAppointments();
           this.loadCheckups();
         }
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading patient data:', error);
+        console.error('Error loading doctor data:', error);
         this.isLoading = false;
       }
     });
   }
 
-  loadIllnesses(): void {
-    this.patientService.getPatientIllnessHistory(this.patientId).subscribe({
-      next: (response) => {
-        if (response.data) {
-          this.illnesses = response.data;
-        }
-      },
-      error: (error) => {
-        console.error('Error loading illnesses:', error);
-      }
-    });
-  }
-
   loadAppointments(): void {
-    this.appointmentService.getAppointmentsByPatientId(this.patientId).subscribe({
+    this.appointmentService.getAppointmentsByDoctorId(this.doctorId).subscribe({
       next: (response) => {
         if (response.data) {
           this.appointments = response.data;
@@ -85,7 +70,7 @@ export class ViewPatientComponent implements OnInit {
   }
 
   loadCheckups(): void {
-    this.checkupService.getCheckupsByPatientId(this.patientId).subscribe({
+    this.checkupService.getCheckupsByDoctorId(this.doctorId).subscribe({
       next: (response) => {
         if (response.data) {
           this.checkups = response.data;
@@ -101,14 +86,9 @@ export class ViewPatientComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  calculateAge(birthdate: string): number {
+  calculateExperience(joinDate: string): number {
     const today = new Date();
-    const birthDate = new Date(birthdate);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
+    const startDate = new Date(joinDate);
+    return today.getFullYear() - startDate.getFullYear();
   }
 }

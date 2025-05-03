@@ -1,51 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PatientService } from '../../../services/patient.service';
+import { DoctorService } from '../../../services/doctor.service';
 
 @Component({
-  selector: 'app-patient-form',
-  templateUrl: './patient-form.component.html',
-  styleUrls: ['./patient-form.component.scss']
+  selector: 'app-doctor-form',
+  templateUrl: './doctor-form.component.html',
+  styleUrls: ['./doctor-form.component.scss']
 })
-export class PatientFormComponent implements OnInit {
-  patientForm: FormGroup;
-  patientId?: number;
+export class DoctorFormComponent implements OnInit {
+  doctorForm: FormGroup;
+  doctorId?: number;
   isEditing: boolean = false;
   isLoading: boolean = false;
   isSubmitting: boolean = false;
   genders: string[] = ['Male', 'Female', 'Other'];
-  bloodGroups: string[] = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-  maritalStatuses: string[] = ['Single', 'Married', 'Divorced', 'Widowed'];
-  formTitle: string = 'Register New Patient';
-  formSubtitle: string = 'Enter patient details to register them in the system';
-  submitButtonText: string = 'Register Patient';
-  maxDate: string;
+  specializations: string[] = [];
+  formTitle: string = 'Register New Doctor';
+  formSubtitle: string = 'Enter doctor details to register them in the system';
+  submitButtonText: string = 'Register Doctor';
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     public router: Router,
-    private patientService: PatientService
+    private doctorService: DoctorService
   ) {
-    this.patientForm = this.createForm();
-    
-    // Set max date to today for birthdate
-    const today = new Date();
-    this.maxDate = today.toISOString().split('T')[0];
+    this.doctorForm = this.createForm();
   }
 
   ngOnInit(): void {
-    this.patientId = this.route.snapshot.paramMap.get('id') ? 
+    this.loadSpecializations();
+    
+    this.doctorId = this.route.snapshot.paramMap.get('id') ? 
       Number(this.route.snapshot.paramMap.get('id')) : undefined;
     
     this.isEditing = this.route.snapshot.url.some(segment => segment.path === 'edit');
     
-    if (this.isEditing && this.patientId) {
-      this.formTitle = 'Edit Patient';
-      this.formSubtitle = 'Update patient information in the system';
-      this.submitButtonText = 'Update Patient';
-      this.loadPatientData();
+    if (this.isEditing && this.doctorId) {
+      this.formTitle = 'Edit Doctor';
+      this.formSubtitle = 'Update doctor information in the system';
+      this.submitButtonText = 'Update Doctor';
+      this.loadDoctorData();
     }
   }
 
@@ -57,77 +53,106 @@ export class PatientFormComponent implements OnInit {
         lastName: ['', [Validators.required, Validators.minLength(2)]]
       }),
       gender: ['', Validators.required],
-      birthdate: ['', Validators.required],
-      bloodGroup: ['', Validators.required],
-      maritalStatus: ['', Validators.required],
-      occupation: [''],
+      specialization: ['', Validators.required],
+      licenseNumber: ['', Validators.required],
+      joinDate: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       mobileNo: ['', [Validators.pattern('^[0-9]{10}$')]],
-      emergencyContact: [''],
+      availability: [''],
       address: this.fb.group({
         street: ['', Validators.required],
         city: ['', Validators.required],
         state: ['', Validators.required],
         postalCode: ['', Validators.required],
         country: ['', Validators.required]
-      }),
-      medicalHistory: ['']
+      })
     });
   }
 
-  loadPatientData(): void {
-    this.isLoading = true;
+  loadSpecializations(): void {
+    this.specializations = [
+      'Cardiologist',
+      'Dermatologist',
+      'Endocrinologist',
+      'Gastroenterologist',
+      'Neurologist',
+      'Oncologist',
+      'Ophthalmologist',
+      'Orthopedic Surgeon',
+      'Pediatrician',
+      'Psychiatrist',
+      'Radiologist',
+      'Urologist',
+      'General Physician'
+    ];
    
-    this.patientService.getPatientById(this.patientId!).subscribe({
+    this.doctorService.getSpecializations().subscribe({
       next: (response) => {
         if (response.data) {
-          this.patientForm.patchValue(response.data);
+          this.specializations = response.data;
         }
-        this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading patient data:', error);
-        this.isLoading = false;
+        console.error('Error loading specializations:', error);
       }
     });
     
   }
 
+  loadDoctorData(): void {
+    this.isLoading = true;
+    
+    
+    
+    this.doctorService.getDoctorById(this.doctorId!).subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.doctorForm.patchValue(response.data);
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading doctor data:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
   onSubmit(): void {
-    if (this.patientForm.invalid) {
+    if (this.doctorForm.invalid) {
       // Mark all fields as touched to show validation errors
-      this.markFormGroupTouched(this.patientForm);
+      this.markFormGroupTouched(this.doctorForm);
       return;
     }
 
     this.isSubmitting = true;
-    const formData = this.patientForm.value;
+    const formData = this.doctorForm.value;
 
-    
-    if (this.isEditing && this.patientId) {
-      this.patientService.updatePatient(this.patientId, formData).subscribe({
+  
+    if (this.isEditing && this.doctorId) {
+      this.doctorService.updateDoctor(this.doctorId, formData).subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.router.navigate(['/dashboard/patients']);
+          this.router.navigate(['/dashboard/doctors']);
         },
         error: (error) => {
-          console.error('Error updating patient:', error);
+          console.error('Error updating doctor:', error);
           this.isSubmitting = false;
         }
       });
     } else {
-      this.patientService.registerPatient(formData).subscribe({
+      this.doctorService.registerDoctor(formData).subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.router.navigate(['/dashboard/patients']);
+          this.router.navigate(['/dashboard/doctors']);
         },
         error: (error) => {
-          console.error('Error registering patient:', error);
+          console.error('Error registering doctor:', error);
           this.isSubmitting = false;
         }
       });
     }
-    
+   
   }
 
   // Helper method to mark all controls in a form group as touched
@@ -143,12 +168,12 @@ export class PatientFormComponent implements OnInit {
 
   // Helper methods for form validation
   isFieldInvalid(controlName: string): boolean {
-    const control = this.patientForm.get(controlName);
+    const control = this.doctorForm.get(controlName);
     return control ? (control.invalid && (control.dirty || control.touched)) : false;
   }
 
   isNameFieldInvalid(fieldName: string): boolean {
-    const nameGroup = this.patientForm.get('name');
+    const nameGroup = this.doctorForm.get('name');
     if (!nameGroup) return false;
     
     const control = nameGroup.get(fieldName);
@@ -156,25 +181,10 @@ export class PatientFormComponent implements OnInit {
   }
 
   isAddressFieldInvalid(fieldName: string): boolean {
-    const addressGroup = this.patientForm.get('address');
+    const addressGroup = this.doctorForm.get('address');
     if (!addressGroup) return false;
     
     const control = addressGroup.get(fieldName);
     return control ? (control.invalid && (control.dirty || control.touched)) : false;
-  }
-
-  calculateAge(birthdate: string): number {
-    if (!birthdate) return 0;
-    
-    const today = new Date();
-    const birthDate = new Date(birthdate);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    
-    return age;
   }
 }

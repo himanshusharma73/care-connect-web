@@ -11,7 +11,7 @@ interface Illness {
 }
 
 interface Patient {
-  id: number;
+  patientId: number;
   name: {
     firstName: string;
     middleName?: string;
@@ -39,7 +39,7 @@ export class IllnessListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.patientId = Number(this.route.snapshot.paramMap.get('id'));
+    this.patientId = Number(this.route.snapshot.paramMap.get('patientId'));
     this.loadPatientData();
     this.loadIllnessHistory();
   }

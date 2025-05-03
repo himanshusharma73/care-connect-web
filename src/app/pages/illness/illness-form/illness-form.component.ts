@@ -26,7 +26,7 @@ export class IllnessFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.patientId = Number(this.route.snapshot.paramMap.get('id'));
+    this.patientId = Number(this.route.snapshot.paramMap.get('patientId'));
     this.illnessId = this.route.snapshot.paramMap.get('illnessId') ? 
       Number(this.route.snapshot.paramMap.get('illnessId')) : undefined;
     

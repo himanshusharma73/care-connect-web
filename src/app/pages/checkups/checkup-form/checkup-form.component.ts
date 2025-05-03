@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { CheckupService } from 'src/app/services/checkup.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { PatientService } from 'src/app/services/patient.service';
-
-
+import { Location } from '@angular/common';
 
 interface Patient {
   id: number;
@@ -41,7 +40,8 @@ export class CheckupFormComponent implements OnInit {
     public router: Router, // Make router public
     private patientService: PatientService,
     private doctorService: DoctorService,
-    private checkupService: CheckupService
+    private checkupService: CheckupService,
+    private location: Location
   ) {
     this.checkupForm = this.createForm();
   }
@@ -108,9 +108,13 @@ export class CheckupFormComponent implements OnInit {
     });
   }
 
-  // Helper method to check if a form control is invalid and touched
+
   isFieldInvalid(controlName: string): boolean {
     const control = this.checkupForm.get(controlName);
     return control ? (control.invalid && (control.dirty || control.touched)) : false;
   }
+
+   goBack(): void {
+  this.location.back();
+}
 }
