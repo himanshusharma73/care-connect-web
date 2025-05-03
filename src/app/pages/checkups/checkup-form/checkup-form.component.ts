@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PatientService } from '../../../services/patient.service';
-import { DoctorService } from '../../../services/doctor.service';
-import { CheckupService } from '../../../services/checkup.service';
+import { CheckupService } from 'src/app/services/checkup.service';
+import { DoctorService } from 'src/app/services/doctor.service';
+import { PatientService } from 'src/app/services/patient.service';
+
 
 
 interface Patient {

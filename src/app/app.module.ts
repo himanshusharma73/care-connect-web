@@ -31,12 +31,13 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { LoginPageComponent } from './pages/login/login.component';
 import { PatientFormComponent } from './pages/patients/patient-form/patient-form.component';
 import { MatNativeDateModule } from '@angular/material/core';
-import { CheckupFormComponent } from './pages/patients/checkup-form/checkup-form.component';
 import { IllnessListComponent } from './pages/illness/illness-list/illness-list.component';
 import { IllnessFormComponent } from './pages/illness/illness-form/illness-form.component';
 import { AppointmentFormComponent } from './pages/appointments/appointment-form/appointment-form.component';
 import { DoctorListComponent } from './pages/doctors/doctor-list/doctor-list.component';
 import { FormFieldComponent } from './components/form-field/form-field.component';
+import { CheckupFormComponent } from './pages/checkups/checkup-form/checkup-form.component';
+import { ViewPatientComponent } from './pages/patients/view-patient/view-patient.component';
 
 
 
@@ -56,7 +57,8 @@ import { FormFieldComponent } from './components/form-field/form-field.component
     IllnessFormComponent,
     AppointmentFormComponent,
     DoctorListComponent,
-    FormFieldComponent
+    FormFieldComponent,
+    ViewPatientComponent
   ],
   imports: [
     BrowserModule,

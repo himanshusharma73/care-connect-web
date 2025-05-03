@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PatientService } from '../../../services/patient.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { AppointmentService } from '../../../services/appointment.service';
+import { Location } from '@angular/common';
 
 interface Patient {
   id: number;
@@ -41,7 +42,8 @@ export class AppointmentFormComponent implements OnInit {
     public router: Router, // Make router public
     private patientService: PatientService,
     private doctorService: DoctorService,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private location: Location
   ) {
     this.appointmentForm = this.createForm();
     this.minDate = new Date().toISOString().split('T')[0];
@@ -162,4 +164,8 @@ export class AppointmentFormComponent implements OnInit {
     const control = timeGroup.get(controlName);
     return control ? (control.invalid && (control.dirty || control.touched)) : false;
   }
+
+  goBack(): void {
+  this.location.back();
+}
 }

@@ -60,7 +60,7 @@ export interface CheckupRequestDto {
 
 // Patient response type (for display)
 export interface Patient {
-  id: number;
+  patientId: number;
   name: {
     firstName: string;
     middleName?: string;

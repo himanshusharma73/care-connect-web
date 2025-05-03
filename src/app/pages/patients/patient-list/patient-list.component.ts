@@ -1,18 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from '../../../services/patient.service';
-
-interface Patient {
-  id: number;
-  name: {
-    firstName: string;
-    middleName?: string;
-    lastName: string;
-  };
-  gender: string;
-  birthdate: string;
-  bloodGroup: string;
-  email: string;
-}
+import { Patient } from 'src/app/models/api-types';
 
 @Component({
   selector: 'app-patient-list',
@@ -63,6 +51,7 @@ export class PatientListComponent implements OnInit {
       patient.email.toLowerCase().includes(term) ||
       patient.bloodGroup.toLowerCase().includes(term)
     );
+    console.log(this.filteredPatients);
   }
 
   formatDate(dateString: string): string {

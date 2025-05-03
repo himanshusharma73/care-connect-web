@@ -60,35 +60,35 @@ export class DoctorListComponent implements OnInit {
 
   applyFilters(): void {
     let filtered = [...this.doctors];
-    
-    // Apply search filter
+
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(doctor => 
+      filtered = filtered.filter(doctor =>
         doctor.name.firstName.toLowerCase().includes(term) ||
         doctor.name.lastName.toLowerCase().includes(term) ||
         doctor.email.toLowerCase().includes(term) ||
         doctor.specialization.toLowerCase().includes(term)
       );
     }
-    
-    // Apply specialization filter
+
     if (this.selectedSpecialization) {
-      filtered = filtered.filter(doctor => 
+      filtered = filtered.filter(doctor =>
         doctor.specialization === this.selectedSpecialization
       );
     }
-    
+
     this.filteredDoctors = filtered;
   }
 
-  onSearch(term: string): void {
-    this.searchTerm = term;
+  onSearch(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm = input.value;
     this.applyFilters();
   }
 
-  onSpecializationChange(specialization: string): void {
-    this.selectedSpecialization = specialization;
+  onSpecializationChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.selectedSpecialization = select.value;
     this.applyFilters();
   }
 
@@ -97,5 +97,8 @@ export class DoctorListComponent implements OnInit {
     this.selectedSpecialization = '';
     this.applyFilters();
   }
-  
+
+  formatSpecialization(spec: string): string {
+    return spec.charAt(0) + spec.slice(1).toLowerCase().replace(/_/g, ' ');
+  }
 }

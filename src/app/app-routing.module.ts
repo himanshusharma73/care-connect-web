@@ -6,14 +6,19 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { PatientListComponent } from './pages/patients/patient-list/patient-list.component';
 import { PatientFormComponent } from './pages/patients/patient-form/patient-form.component';
+import { ViewPatientComponent } from './pages/patients/view-patient/view-patient.component';
+import { DoctorListComponent } from './pages/doctors/doctor-list/doctor-list.component';
+import { AppointmentFormComponent } from './pages/appointments/appointment-form/appointment-form.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/patients', component: PatientListComponent },
-   { path: 'dashboard/patients/new', component: PatientFormComponent},
-  // Add more routes as needed
+  { path: 'dashboard/patients/new', component: PatientFormComponent},
+  { path: 'dashboard/patients/:id', component: ViewPatientComponent },
+  { path: 'dashboard/doctors', component: DoctorListComponent },
+  { path: 'dashboard/appointments', component: AppointmentFormComponent },
   { path: '**', redirectTo: '' } // Redirect to home for any unknown routes
 ];
 

@@ -1,0 +1,60 @@
+<div class="container mt-4">
+    <h2 class="mb-4">Patient Details</h2>
+
+    <!-- Personal Information Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <strong>Personal Information</strong>
+        </div>
+        <div class="card-body row">
+            <div class="col-md-4 mb-3">
+                <strong>First Name:</strong> {{ patient.firstName || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>Middle Name:</strong> {{ patient.middleName || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>Last Name:</strong> {{ patient.lastName || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>Gender:</strong> {{ patient.gender || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>Date of Birth:</strong> {{ patient.dob | date: 'dd-MM-yyyy' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>Email:</strong> {{ patient.email || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>Phone Number:</strong> {{ patient.phoneNumber || 'N/A' }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Address Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <strong>Address</strong>
+        </div>
+        <div class="card-body row">
+            <div class="col-md-4 mb-3">
+                <strong>Street:</strong> {{ patient.address?.street || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>City:</strong> {{ patient.address?.city || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>State:</strong> {{ patient.address?.state || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>Country:</strong> {{ patient.address?.country || 'N/A' }}
+            </div>
+            <div class="col-md-4 mb-3">
+                <strong>Zip Code:</strong> {{ patient.address?.zipCode || 'N/A' }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    
+</div>
