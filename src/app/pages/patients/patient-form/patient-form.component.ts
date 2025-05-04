@@ -20,6 +20,8 @@ export class PatientFormComponent implements OnInit {
   formTitle: string = 'Register New Patient';
   formSubtitle: string = 'Enter patient details to register them in the system';
   submitButtonText: string = 'Register Patient';
+  booleanOptions = [{ label: 'Yes', value: true },
+                   { label: 'No', value: false }];
   maxDate: string;
 
   constructor(
@@ -63,6 +65,7 @@ export class PatientFormComponent implements OnInit {
       occupation: [''],
       email: ['', [Validators.required, Validators.email]],
       mobileNo: ['', [Validators.pattern('^[0-9]{10}$')]],
+      adharNo: ['', [Validators.pattern('^[0-9]{12}$')]],
       emergencyContact: [''],
       address: this.fb.group({
         street: ['', Validators.required],
@@ -71,6 +74,11 @@ export class PatientFormComponent implements OnInit {
         postalCode: ['', Validators.required],
         country: ['', Validators.required]
       }),
+      isSmoker: ['', Validators.required],
+      isAlcoholic: ['', Validators.required],
+      hasInsurance: ['', Validators.required],
+      isSelfPay: ['', Validators.required],
+      isMedicaidEligible: ['', Validators.required],
       medicalHistory: ['']
     });
   }
@@ -95,7 +103,6 @@ export class PatientFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.patientForm.invalid) {
-      // Mark all fields as touched to show validation errors
       this.markFormGroupTouched(this.patientForm);
       return;
     }
@@ -116,6 +123,7 @@ export class PatientFormComponent implements OnInit {
         }
       });
     } else {
+      console.log('Registering new patient:', formData);
       this.patientService.registerPatient(formData).subscribe({
         next: () => {
           this.isSubmitting = false;

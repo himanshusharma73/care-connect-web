@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -40,6 +40,9 @@ import { CheckupFormComponent } from './pages/checkups/checkup-form/checkup-form
 import { ViewPatientComponent } from './pages/patients/view-patient/view-patient.component';
 import { DoctorViewComponent } from './pages/doctors/doctor-view/doctor-view.component';
 import { DoctorFormComponent } from './pages/doctors/doctor-form/doctor-form.component';
+import { GlobalErrorHandlerService } from './services/global-error-handler.service';
+import { ErrorInterceptor } from './services/error.interceptor';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -83,14 +86,13 @@ import { DoctorFormComponent } from './pages/doctors/doctor-form/doctor-form.com
     MatTableModule,
     MatTabsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSnackBarModule
   ],
   providers: [
-     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService }
   ],
   bootstrap: [AppComponent]
 })

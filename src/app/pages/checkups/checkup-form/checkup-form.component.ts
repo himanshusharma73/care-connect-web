@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CheckupService } from 'src/app/services/checkup.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { PatientService } from 'src/app/services/patient.service';
 import { Location } from '@angular/common';
+import { AppointmentService } from 'src/app/services/appointment.service';
 
 interface Patient {
-  id: number;
+  patientId: number;
   name: {
     firstName: string;
     lastName: string;
@@ -15,7 +16,7 @@ interface Patient {
 }
 
 interface Doctor {
-  id: number;
+  doctorId: number;
   name: {
     firstName: string;
     lastName: string;
@@ -33,15 +34,17 @@ export class CheckupFormComponent implements OnInit {
   patients: Patient[] = [];
   doctors: Doctor[] = [];
   isLoading: boolean = false;
-  checkupStatuses: string[] = ['Completed', 'Pending', 'Cancelled'];
+  checkupStatuses: string[] = ['Completed', 'Active', 'Cancelled'];
   
   constructor(
     private fb: FormBuilder,
-    public router: Router, // Make router public
+    public router: Router,
     private patientService: PatientService,
     private doctorService: DoctorService,
     private checkupService: CheckupService,
-    private location: Location
+    private appointmentService: AppointmentService,
+    private location: Location,
+    private route: ActivatedRoute,
   ) {
     this.checkupForm = this.createForm();
   }
@@ -49,6 +52,12 @@ export class CheckupFormComponent implements OnInit {
   ngOnInit(): void {
     this.loadPatients();
     this.loadDoctors();
+    this.route.queryParams.subscribe(params => {
+    const appointmentId = params['appointmentId'];
+    if (appointmentId) {
+      this.prefillFromAppointment(appointmentId);
+    }
+  });
   }
 
   createForm(): FormGroup {
@@ -94,12 +103,13 @@ export class CheckupFormComponent implements OnInit {
     }
 
     this.isLoading = true;
-    const formData = this.checkupForm.value;
-
+    const formData = this.checkupForm.getRawValue()
     this.checkupService.saveCheckup(formData).subscribe({
+    
       next: () => {
+       
         this.isLoading = false;
-        this.router.navigate(['/dashboard/checkups']);
+        this.router.navigate(['/dashboard/patients', formData.patientId]);
       },
       error: (error) => {
         console.error('Error saving checkup:', error);
@@ -116,5 +126,22 @@ export class CheckupFormComponent implements OnInit {
 
    goBack(): void {
   this.location.back();
+}
+
+prefillFromAppointment(appointmentId: number): void {
+  this.appointmentService.getAppointmentById(appointmentId).subscribe({
+    next: (response) => {
+      const appointment = response.data?.[0];
+      if (!appointment) return;
+      this.checkupForm.patchValue(appointment);
+      this.checkupForm.patchValue({checkupStatus: appointment.status});
+
+      this.checkupForm.get('patientId')?.disable();
+      this.checkupForm.get('doctorId')?.disable();
+    },
+    error: (err) => {
+      console.error('Error loading appointment:', err);
+    }
+  });
 }
 }
