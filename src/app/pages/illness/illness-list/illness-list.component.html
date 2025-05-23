@@ -1,0 +1,79 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col gap-4 md:gap-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold">
+                    {{ patient ? (patient.name.firstName + ' ' + patient.name.lastName + '\'s Illnesses') : 'Patient
+                    Illnesses' }}
+                </h1>
+                <p *ngIf="patient" class="text-gray-500">
+                    {{ patient.gender }} • {{ formatDate(patient.birthdate) }} • {{ patient.bloodGroup }}
+                </p>
+            </div>
+            <div class="flex gap-2">
+                <button routerLink="/dashboard/patients/{{patientId}}"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
+                    Back to Patient
+                </button>
+                <button routerLink="/dashboard/patients/{{patientId}}/illnesses/new"
+                    class="px-4 py-2 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700">
+                    Add Illness
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-4 border-b">
+                <h2 class="text-lg font-semibold">Illness History</h2>
+                <p class="text-sm text-gray-500">View and manage patient's illness records</p>
+            </div>
+            <div class="p-4">
+                <div *ngIf="isLoading" class="flex h-40 items-center justify-center">
+                    <p>Loading illness history...</p>
+                </div>
+                <div *ngIf="!isLoading && illnesses.length === 0" class="flex h-40 items-center justify-center">
+                    <p>No illness records found for this patient.</p>
+                </div>
+                <div *ngIf="!isLoading && illnesses.length > 0" class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Date</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Illness</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Description</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr *ngFor="let illness of illnesses">
+                                <td class="px-6 py-4 whitespace-nowrap">{{ formatDate(illness.illnessDate) }}</td>
+                                <td class="px-6 py-4">{{ illness.illness.join(', ') }}</td>
+                                <td class="px-6 py-4 max-w-xs truncate">{{ illness.description }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex space-x-2">
+                                        <a [routerLink]="['/dashboard/patients', patientId, 'illnesses', illness.illnessId]"
+                                            class="px-3 py-1 text-xs font-medium rounded-md border border-gray-300 hover:bg-gray-50">
+                                            View
+                                        </a>
+                                        <a [routerLink]="['/dashboard/patients', patientId, 'illnesses', illness.illnessId, 'edit']"
+                                            class="px-3 py-1 text-xs font-medium rounded-md border border-gray-300 hover:bg-gray-50">
+                                            Edit
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

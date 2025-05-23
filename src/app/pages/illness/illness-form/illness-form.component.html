@@ -1,0 +1,66 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-6 border-b">
+                <h1 class="text-xl font-bold">{{ isEditing ? 'Edit Illness Record' : 'Add Illness Record' }}</h1>
+                <p class="text-sm text-gray-500">
+                    {{ isEditing ? 'Update illness information for the patient' : 'Record new illness information for
+                    the patient' }}
+                </p>
+            </div>
+
+            <div class="p-6">
+                <form [formGroup]="illnessForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <div class="form-field">
+                        <label class="form-label">
+                            Date of Illness <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" formControlName="illnessDate" class="form-input"
+                            [max]="today" required />
+                    </div>
+
+                    <div>
+                        <label class="form-label">
+                            Illness <span class="text-red-500">*</span>
+                        </label>
+                        <div formArrayName="illness">
+                            <div *ngFor="let item of illnessArray.controls; let i = index"
+                                class="flex items-center gap-2 mt-2">
+                                <input [formControlName]="i" class="form-input flex-1" placeholder="Enter illness name"
+                                    required />
+                                <button type="button" *ngIf="illnessArray.length > 1" (click)="removeIllness(i)"
+                                    class="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
+                                    Remove
+                                </button>
+                            </div>
+                            <button type="button" (click)="addIllness()"
+                                class="mt-2 px-3 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
+                                Add Another Illness
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">
+                            Description <span class="text-red-500">*</span>
+                        </label>
+                        <textarea formControlName="description" rows="4" class="form-input"
+                            placeholder="Enter detailed description of the illness" required></textarea>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" (click)="onCancel()"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+                            [disabled]="isLoading">
+                            Cancel
+                        </button>
+                        <button type="submit" [disabled]="illnessForm.invalid || isLoading"
+                            class="px-4 py-2 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700 disabled:opacity-50">
+                            {{ isLoading ? 'Saving...' : (isEditing ? 'Update Illness' : 'Save Illness') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

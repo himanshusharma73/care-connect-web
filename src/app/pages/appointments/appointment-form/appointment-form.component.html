@@ -1,0 +1,113 @@
+<div class="flex min-h-screen flex-col">
+    <app-header [isDashboard]="true"></app-header>
+
+    <main class="flex-1 py-8">
+
+<div class="container px-4 md:px-6">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-6 border-b">
+                <h1 class="text-xl font-bold">Book New Appointment</h1>
+                <p class="text-sm text-gray-500">Schedule an appointment with a doctor</p>
+            </div>
+
+            <div class="p-6">
+                <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <div class="form-field">
+                        <label class="form-label">
+                            Patient <span class="text-red-500">*</span>
+                        </label>
+                        <select formControlName="patientId" class="form-select"
+                            [ngClass]="{'input-error': isFieldInvalid('patientId')}" required>
+                            <option [ngValue]="null">Select patient</option>
+                            <option *ngFor="let patient of patients" [value]="patient.id">
+                                {{ patient.name.firstName }} {{ patient.name.lastName }}
+                            </option>
+                        </select>
+                        <div *ngIf="isFieldInvalid('patientId')" class="error-message">
+                            Please select a patient.
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <label class="form-label">Doctor</label>
+                            <select formControlName="doctorId" class="form-select" [disabled]="!showDoctorSelect">
+                                <option [ngValue]="null">Select doctor</option>
+                                <option *ngFor="let doctor of doctors" [value]="doctor.id">
+                                    Dr. {{ doctor.name.firstName }} {{ doctor.name.lastName }} - {{
+                                    doctor.specialization }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Specialization</label>
+                            <select formControlName="specialization" class="form-select" [disabled]="!showDoctorSelect">
+                                <option [ngValue]="null">Select specialization</option>
+                                <option *ngFor="let spec of specializations" [value]="spec">
+                                    {{ spec }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div *ngIf="appointmentForm.hasError('noDoctorOrSpecialization')" class="text-red-500 text-sm">
+                        Please select either a doctor or a specialization.
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <label class="form-label">
+                                Appointment Date <span class="text-red-500">*</span>
+                            </label>
+                            <input type="date" formControlName="appointmentDate" class="form-input" [min]="minDate"
+                                [ngClass]="{'input-error': isFieldInvalid('appointmentDate')}" required />
+                            <div *ngIf="isFieldInvalid('appointmentDate')" class="error-message">
+                                Please select an appointment date.
+                            </div>
+                        </div>
+
+                        <div formGroupName="appointmentStartTime" class="form-field">
+                            <label class="form-label">
+                                Appointment Time <span class="text-red-500">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <select formControlName="hour" class="form-select"
+                                        [ngClass]="{'input-error': isTimeFieldInvalid('hour')}" required>
+                                        <option *ngFor="let hour of [9, 10, 11, 12, 13, 14, 15, 16, 17]" [value]="hour">
+                                            {{ hour.toString().padStart(2, '0') }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select formControlName="minute" class="form-select"
+                                        [ngClass]="{'input-error': isTimeFieldInvalid('minute')}" required>
+                                        <option *ngFor="let minute of [0, 15, 30, 45]" [value]="minute">
+                                            {{ minute.toString().padStart(2, '0') }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                    <button type="button" (click)="goBack()"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+                            [disabled]="isLoading">
+                            Cancel
+                        </button>
+                        <button type="submit" [disabled]="appointmentForm.invalid || isLoading"
+                            class="px-4 py-2 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700 disabled:opacity-50">
+                            {{ isLoading ? 'Booking...' : 'Book Appointment' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+</div>

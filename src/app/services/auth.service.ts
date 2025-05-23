@@ -8,7 +8,7 @@ import { tap, delay } from 'rxjs/operators';
 })
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
-  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
   private apiUrl = 'http://localhost:8080/api';
 
