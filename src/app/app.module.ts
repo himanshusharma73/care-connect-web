@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+import { CommonModule } from '@angular/common'; // Make sure CommonModule is imported
 
 // Angular Material Imports
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +31,19 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { LoginPageComponent } from './pages/login/login.component';
 import { PatientFormComponent } from './pages/patients/patient-form/patient-form.component';
 import { MatNativeDateModule } from '@angular/material/core';
-import { CheckupFormComponent } from './pages/patients/checkup-form/checkup-form.component';
+import { IllnessListComponent } from './pages/illness/illness-list/illness-list.component';
+import { IllnessFormComponent } from './pages/illness/illness-form/illness-form.component';
+import { AppointmentFormComponent } from './pages/appointments/appointment-form/appointment-form.component';
+import { DoctorListComponent } from './pages/doctors/doctor-list/doctor-list.component';
+import { FormFieldComponent } from './components/form-field/form-field.component';
+import { CheckupFormComponent } from './pages/checkups/checkup-form/checkup-form.component';
+import { ViewPatientComponent } from './pages/patients/view-patient/view-patient.component';
+import { DoctorViewComponent } from './pages/doctors/doctor-view/doctor-view.component';
+import { DoctorFormComponent } from './pages/doctors/doctor-form/doctor-form.component';
+import { GlobalErrorHandlerService } from './services/global-error-handler.service';
+import { ErrorInterceptor } from './services/error.interceptor';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 
 @NgModule({
@@ -44,10 +57,19 @@ import { CheckupFormComponent } from './pages/patients/checkup-form/checkup-form
     PatientListComponent,
     LoginPageComponent,
     PatientFormComponent,
-    CheckupFormComponent
+    CheckupFormComponent,
+    IllnessListComponent,
+    IllnessFormComponent,
+    AppointmentFormComponent,
+    DoctorListComponent,
+    FormFieldComponent,
+    ViewPatientComponent,
+    DoctorViewComponent,
+    DoctorFormComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
@@ -64,14 +86,13 @@ import { CheckupFormComponent } from './pages/patients/checkup-form/checkup-form
     MatTableModule,
     MatTabsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSnackBarModule
   ],
   providers: [
-     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,237 +1,433 @@
-<div class="container px-4 py-8 md:px-6">
-    <div class="flex flex-col gap-4 md:gap-8">
-        <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">{{isEditing ? 'Edit Patient' : 'Register New Patient'}}</h1>
-            <button mat-stroked-button routerLink="/dashboard/patients">Back to Patients</button>
+<div class="container mx-auto px-4 py-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Back button -->
+        <div class="mb-4">
+            <button (click)="router.navigate(['/dashboard/patients'])"
+                class="flex items-center text-sm text-gray-600 hover:text-teal-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Patients
+            </button>
         </div>
 
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>{{isEditing ? 'Edit Patient' : 'Register New Patient'}}</mat-card-title>
-                <mat-card-subtitle>
-                    {{isEditing ? 'Update patient information in the system' : 'Enter patient details to register them
-                    in the system'}}
-                </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                <div *ngIf="isLoading" class="flex justify-center py-8">
-                    <mat-spinner></mat-spinner>
+        <!-- Loading state -->
+        <div *ngIf="isLoading" class="bg-white rounded-lg shadow-md border p-8 flex justify-center items-center">
+            <div class="text-center">
+                <div
+                    class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-teal-600 border-r-transparent">
+                </div>
+                <p class="mt-2 text-gray-600">Loading patient information...</p>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div *ngIf="!isLoading" class="bg-white rounded-lg shadow-md border overflow-hidden">
+            <!-- Form header -->
+            <div class="bg-gradient-to-r from-teal-600 to-teal-500 p-6 text-white">
+                <h1 class="text-2xl font-bold">{{ formTitle }}</h1>
+                <p class="text-teal-100 mt-1">{{ formSubtitle }}</p>
+            </div>
+
+            <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="p-6">
+                <!-- Personal Information Section -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-teal-600 h-6 w-1 rounded mr-2"></div>
+                        <h2 class="text-lg font-semibold text-gray-800">Personal Information</h2>
+                    </div>
+
+                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <div formGroupName="name" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <!-- First Name -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    First Name <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="firstName"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isNameFieldInvalid('firstName'), 'border-gray-300': !isNameFieldInvalid('firstName')}"
+                                    placeholder="Enter first name" />
+                                <div *ngIf="isNameFieldInvalid('firstName')" class="text-red-500 text-xs mt-1">
+                                    First name is required
+                                </div>
+                            </div>
+
+                            <!-- Middle Name -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Middle Name
+                                </label>
+                                <input type="text" formControlName="middleName"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    placeholder="Enter middle name (optional)" />
+                            </div>
+
+                            <!-- Last Name -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Last Name <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="lastName"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isNameFieldInvalid('lastName'), 'border-gray-300': !isNameFieldInvalid('lastName')}"
+                                    placeholder="Enter last name" />
+                                <div *ngIf="isNameFieldInvalid('lastName')" class="text-red-500 text-xs mt-1">
+                                    Last name is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <!-- Gender -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Gender <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="gender"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('gender'), 'border-gray-300': !isFieldInvalid('gender')}">
+                                    <option [ngValue]="''">Select gender</option>
+                                    <option *ngFor="let gender of genders" [value]="gender">{{ gender }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('gender')" class="text-red-500 text-xs mt-1">
+                                    Gender is required
+                                </div>
+                            </div>
+
+                            <!-- Birthdate -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Date of Birth <span class="text-red-500">*</span>
+                                </label>
+                                <input type="date" formControlName="birthdate" [max]="maxDate"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('birthdate'), 'border-gray-300': !isFieldInvalid('birthdate')}" />
+                                <div *ngIf="isFieldInvalid('birthdate')" class="text-red-500 text-xs mt-1">
+                                    Date of birth is required
+                                </div>
+                                <div *ngIf="patientForm.get('birthdate')?.value" class="text-gray-500 text-xs mt-1">
+                                    Age: {{ calculateAge(patientForm.get('birthdate')?.value) }} years
+                                </div>
+                            </div>
+
+                            <!-- Blood Group -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Blood Group <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="bloodGroup"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('bloodGroup'), 'border-gray-300': !isFieldInvalid('bloodGroup')}">
+                                    <option [ngValue]="''">Select blood group</option>
+                                    <option *ngFor="let group of bloodGroups" [value]="group">{{ group }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('bloodGroup')" class="text-red-500 text-xs mt-1">
+                                    Blood group is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Marital Status -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Marital Status <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="maritalStatus"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('maritalStatus'), 'border-gray-300': !isFieldInvalid('maritalStatus')}">
+                                    <option [ngValue]="''">Select marital status</option>
+                                    <option *ngFor="let status of maritalStatuses" [value]="status">{{ status }}
+                                    </option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('maritalStatus')" class="text-red-500 text-xs mt-1">
+                                    Marital status is required
+                                </div>
+                            </div>
+
+                            <!-- Occupation -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+                                <input type="text" formControlName="occupation"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    placeholder="Enter occupation" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <form *ngIf="!isLoading" [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="space-y-6">
-                    <!-- Personal Information -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-medium">Personal Information</h3>
+                <!-- Contact Information Section -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-teal-600 h-6 w-1 rounded mr-2"></div>
+                        <h2 class="text-lg font-semibold text-gray-800">Contact Information</h2>
+                    </div>
 
-                        <div formGroupName="name" class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <mat-form-field appearance="outline">
-                                <mat-label>First Name</mat-label>
-                                <input matInput formControlName="firstName" required>
-                                <mat-error *ngIf="patientForm.get('name.firstName')?.hasError('required')">
-                                    First name is required
-                                </mat-error>
-                                <mat-error *ngIf="patientForm.get('name.firstName')?.hasError('minlength')">
-                                    First name must be at least 3 characters
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Middle Name</mat-label>
-                                <input matInput formControlName="middleName">
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Last Name</mat-label>
-                                <input matInput formControlName="lastName" required>
-                                <mat-error *ngIf="patientForm.get('name.lastName')?.hasError('required')">
-                                    Last name is required
-                                </mat-error>
-                                <mat-error *ngIf="patientForm.get('name.lastName')?.hasError('minlength')">
-                                    Last name must be at least 3 characters
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Date of Birth</mat-label>
-                                <input matInput [matDatepicker]="picker" formControlName="birthdate" required>
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                                <mat-error *ngIf="patientForm.get('birthdate')?.hasError('required')">
-                                    Date of birth is required
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Gender</mat-label>
-                                <mat-select formControlName="gender" required>
-                                    <mat-option value="Male">Male</mat-option>
-                                    <mat-option value="Female">Female</mat-option>
-                                    <mat-option value="Other">Other</mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="patientForm.get('gender')?.hasError('required')">
-                                    Gender is required
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Blood Group</mat-label>
-                                <mat-select formControlName="bloodGroup" required>
-                                    <mat-option value="A+">A+</mat-option>
-                                    <mat-option value="A-">A-</mat-option>
-                                    <mat-option value="B+">B+</mat-option>
-                                    <mat-option value="B-">B-</mat-option>
-                                    <mat-option value="AB+">AB+</mat-option>
-                                    <mat-option value="AB-">AB-</mat-option>
-                                    <mat-option value="O+">O+</mat-option>
-                                    <mat-option value="O-">O-</mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="patientForm.get('bloodGroup')?.hasError('required')">
-                                    Blood group is required
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Email</mat-label>
-                                <input matInput type="email" formControlName="email" required>
-                                <mat-error *ngIf="patientForm.get('email')?.hasError('required')">
-                                    Email is required
-                                </mat-error>
-                                <mat-error *ngIf="patientForm.get('email')?.hasError('email')">
+                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <!-- Email -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Email <span class="text-red-500">*</span>
+                                </label>
+                                <input type="email" formControlName="email"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('email'), 'border-gray-300': !isFieldInvalid('email')}"
+                                    placeholder="Enter email address" />
+                                <div *ngIf="isFieldInvalid('email')" class="text-red-500 text-xs mt-1">
                                     Please enter a valid email address
-                                </mat-error>
-                            </mat-form-field>
+                                </div>
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Mobile Number</mat-label>
-                                <input matInput type="number" formControlName="mobileNo">
-                            </mat-form-field>
+                            <!-- Mobile Number -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                                <input type="tel" formControlName="mobileNo"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('mobileNo'), 'border-gray-300': !isFieldInvalid('mobileNo')}"
+                                    placeholder="Enter 10-digit mobile number" />
+                                <div *ngIf="isFieldInvalid('mobileNo')" class="text-red-500 text-xs mt-1">
+                                    Please enter a valid 10-digit mobile number
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Emergency Contact</label>
+                                <input type="tel" formControlName="emergencyContact"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('emergencyContact'), 'border-gray-300': !isFieldInvalid('emergencyContact')}"
+                                    placeholder="Enter emergency contact number" />
+                                <div *ngIf="isFieldInvalid('emergencyContact')" class="text-red-500 text-xs mt-1">
+                                    Please enter a valid 10-digit emergency contact number
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Adhar Number</label>
+                                <input type="tel" formControlName="adharNo"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('adharNo'), 'border-gray-300': !isFieldInvalid('adharNo')}"
+                                    placeholder="Enter 12-digit mobile number" />
+                                <div *ngIf="isFieldInvalid('adharNo')" class="text-red-500 text-xs mt-1">
+                                    Please enter a valid 12-digit Adhar number
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Marital Status</mat-label>
-                                <mat-select formControlName="maritalStatus" required>
-                                    <mat-option value="Single">Single</mat-option>
-                                    <mat-option value="Married">Married</mat-option>
-                                    <mat-option value="Divorced">Divorced</mat-option>
-                                    <mat-option value="Widowed">Widowed</mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="patientForm.get('maritalStatus')?.hasError('required')">
-                                    Marital status is required
-                                </mat-error>
-                            </mat-form-field>
+                    
+                        
+                    </div>
+                </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Occupation</mat-label>
-                                <input matInput formControlName="occupation" required>
-                                <mat-error *ngIf="patientForm.get('occupation')?.hasError('required')">
-                                    Occupation is required
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
+                <!-- Address Section -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-teal-600 h-6 w-1 rounded mr-2"></div>
+                        <h2 class="text-lg font-semibold text-gray-800">Address</h2>
                     </div>
 
-                    <!-- Address -->
-                    <div class="space-y-4" formGroupName="address">
-                        <h3 class="text-lg font-medium">Address</h3>
+                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200" formGroupName="address">
+                        <!-- Street -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Street <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" formControlName="street"
+                                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                [ngClass]="{'border-red-300 bg-red-50': isAddressFieldInvalid('street'), 'border-gray-300': !isAddressFieldInvalid('street')}"
+                                placeholder="Enter street address" />
+                            <div *ngIf="isAddressFieldInvalid('street')" class="text-red-500 text-xs mt-1">
+                                Street address is required
+                            </div>
+                        </div>
 
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Street</mat-label>
-                            <input matInput formControlName="street" required>
-                            <mat-error *ngIf="patientForm.get('address.street')?.hasError('required')">
-                                Street is required
-                            </mat-error>
-                        </mat-form-field>
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>City</mat-label>
-                                <input matInput formControlName="city" required>
-                                <mat-error *ngIf="patientForm.get('address.city')?.hasError('required')">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <!-- City -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    City <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="city"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isAddressFieldInvalid('city'), 'border-gray-300': !isAddressFieldInvalid('city')}"
+                                    placeholder="Enter city" />
+                                <div *ngIf="isAddressFieldInvalid('city')" class="text-red-500 text-xs mt-1">
                                     City is required
-                                </mat-error>
-                            </mat-form-field>
+                                </div>
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>State</mat-label>
-                                <input matInput formControlName="state" required>
-                                <mat-error *ngIf="patientForm.get('address.state')?.hasError('required')">
+                            <!-- State -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    State <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="state"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isAddressFieldInvalid('state'), 'border-gray-300': !isAddressFieldInvalid('state')}"
+                                    placeholder="Enter state" />
+                                <div *ngIf="isAddressFieldInvalid('state')" class="text-red-500 text-xs mt-1">
                                     State is required
-                                </mat-error>
-                            </mat-form-field>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Postal Code</mat-label>
-                                <input matInput formControlName="postalCode" required>
-                                <mat-error *ngIf="patientForm.get('address.postalCode')?.hasError('required')">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Postal Code -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Postal Code <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="postalCode"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isAddressFieldInvalid('postalCode'), 'border-gray-300': !isAddressFieldInvalid('postalCode')}"
+                                    placeholder="Enter postal code" />
+                                <div *ngIf="isAddressFieldInvalid('postalCode')" class="text-red-500 text-xs mt-1">
                                     Postal code is required
-                                </mat-error>
-                            </mat-form-field>
+                                </div>
+                            </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Country</mat-label>
-                                <input matInput formControlName="country" required>
-                                <mat-error *ngIf="patientForm.get('address.country')?.hasError('required')">
+                            <!-- Country -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Country <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" formControlName="country"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                                    [ngClass]="{'border-red-300 bg-red-50': isAddressFieldInvalid('country'), 'border-gray-300': !isAddressFieldInvalid('country')}"
+                                    placeholder="Enter country" />
+                                <div *ngIf="isAddressFieldInvalid('country')" class="text-red-500 text-xs mt-1">
                                     Country is required
-                                </mat-error>
-                            </mat-form-field>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Medical Information -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-medium">Medical Information</h3>
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Emergency Contact</mat-label>
-                                <input matInput type="number" formControlName="emergencyContactNumber">
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Preferred Language</mat-label>
-                                <input matInput formControlName="preferredLanguage" required>
-                                <mat-error *ngIf="patientForm.get('preferredLanguage')?.hasError('required')">
-                                    Preferred language is required
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <mat-checkbox formControlName="isSmoker">Smoker</mat-checkbox>
-                            <mat-checkbox formControlName="isAlcoholic">Alcoholic</mat-checkbox>
+                </div>
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-teal-600 h-6 w-1 rounded mr-2"></div>
+                        <h2 class="text-lg font-semibold text-gray-800">Extra Personal Information</h2>
+                    </div>
+                
+                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                           
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Smoker <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="isSmoker"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('isSmoker'), 'border-gray-300': !isFieldInvalid('isSmoker')}">
+                                    <option [ngValue]="''">Select Smoker status</option>
+                                    <option *ngFor="let isSmoker of booleanOptions" [value]="isSmoker.value">{{ isSmoker.label }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('isSmoker')" class="text-red-500 text-xs mt-1">
+                                    Smoker status is required
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Alcoholic <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="isAlcoholic"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('isAlcoholic'), 'border-gray-300': !isFieldInvalid('isAlcoholic')}">
+                                    <option [ngValue]="''">Select Alcoholic status</option>
+                                    <option *ngFor="let isAlcoholic of booleanOptions" [value]="isAlcoholic.value">{{ isAlcoholic.label }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('isAlcoholic')" class="text-red-500 text-xs mt-1">
+                                    Alcoholic status is required
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Insurance <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="hasInsurance"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('hasInsurance'), 'border-gray-300': !isFieldInvalid('hasInsurance')}">
+                                    <option [ngValue]="''">Select Insurance status</option>
+                                    <option *ngFor="let hasInsurance of booleanOptions" [value]="hasInsurance.value">{{ hasInsurance.label }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('hasInsurance')" class="text-red-500 text-xs mt-1">
+                                    Insurance status is required
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    SelfPay <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="isSelfPay"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('isSelfPay'), 'border-gray-300': !isFieldInvalid('isSelfPay')}">
+                                    <option [ngValue]="''">Select SelfPay status</option>
+                                    <option *ngFor="let isSelfPay of booleanOptions" [value]="isSelfPay.value">{{ isSelfPay.label }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('isSelfPay')" class="text-red-500 text-xs mt-1">
+                                    SelfPay status is required
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    MedicaidEligible <span class="text-red-500">*</span>
+                                </label>
+                                <select formControlName="isMedicaidEligible"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all appearance-none bg-white"
+                                    [ngClass]="{'border-red-300 bg-red-50': isFieldInvalid('isMedicaidEligible'), 'border-gray-300': !isFieldInvalid('isMedicaidEligible')}">
+                                    <option [ngValue]="''">Select MedicaidEligible status</option>
+                                    <option *ngFor="let isMedicaidEligible of booleanOptions" [value]="isMedicaidEligible.value">{{ isMedicaidEligible.label }}</option>
+                                </select>
+                                <div *ngIf="isFieldInvalid('isMedicaidEligible')" class="text-red-500 text-xs mt-1">
+                                    MedicaidEligible status is required
+                                </div>
+                            </div>
+                          
                         </div>
                     </div>
+                </div>
+       
 
-                    <!-- Insurance Information -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-medium">Insurance Information</h3>
 
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <mat-checkbox formControlName="hasInsurance">Has Insurance</mat-checkbox>
-                            <mat-checkbox formControlName="isMedicaidEligible">Medicaid Eligible</mat-checkbox>
-                            <mat-checkbox formControlName="selfPay">Self Pay</mat-checkbox>
-                        </div>
+
+                <!-- Medical History Section -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-teal-600 h-6 w-1 rounded mr-2"></div>
+                        <h2 class="text-lg font-semibold text-gray-800">Medical History</h2>
                     </div>
 
-                    <div class="flex justify-end space-x-4">
-                        <button type="button" mat-stroked-button routerLink="/dashboard/patients"
-                            [disabled]="isLoading">
-                            Cancel
-                        </button>
-                        <button type="submit" mat-flat-button color="primary"
-                            [disabled]="patientForm.invalid || isLoading">
-                            {{isLoading ? 'Saving...' : isEditing ? 'Update Patient' : 'Register Patient'}}
-                        </button>
+                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Medical Notes</label>
+                        <textarea formControlName="medicalHistory" rows="4"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                            placeholder="Enter any relevant medical history or notes"></textarea>
                     </div>
-                </form>
-            </mat-card-content>
-        </mat-card>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-4 mt-8">
+                    <button type="button" (click)="router.navigate(['/dashboard/patients'])"
+                        class="px-6 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all shadow-sm"
+                        [disabled]="isSubmitting">
+                        Cancel
+                    </button>
+                    <button type="submit" [disabled]="isSubmitting"
+                        class="px-6 py-2.5 bg-teal-600 text-white rounded-md text-sm font-medium hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all shadow-sm disabled:opacity-50 flex items-center">
+                        <span *ngIf="isSubmitting" class="mr-2">
+                            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                        </span>
+                        {{ isSubmitting ? 'Saving...' : submitButtonText }}
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

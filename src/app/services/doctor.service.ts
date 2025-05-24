@@ -1,26 +1,41 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
-import { ApiResponse, CheckupRequestDto } from '../models/api-types';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DoctorService {
-  constructor(private apiService: ApiService) {}
+  private apiUrl = `${environment.adminUrl}/doctors`;
 
-  // Submit patient checkup
-  submitPatientCheckup(checkupData: CheckupRequestDto): Observable<ApiResponse> {
-    return this.apiService.post<CheckupRequestDto, ApiResponse>('/patient/checkup', checkupData);
+  constructor(private http: HttpClient) { }
+
+  getAllDoctors(): Observable<any> {
+    return this.http.get(this.apiUrl);
   }
 
-  // Get all checkup details
-  getAllCheckupDetails(): Observable<ApiResponse> {
-    return this.apiService.post<null, ApiResponse>('/checkups', null);
+  getDoctorById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  // Get illness for a specific patient
-  getPatientIllness(patientId: number): Observable<ApiResponse> {
-    return this.apiService.get<ApiResponse>(`/illnesses/patients/${patientId}`);
+  registerDoctor(doctorData: any): Observable<any> {
+    return this.http.post(this.apiUrl, doctorData);
+  }
+
+  updateDoctor(id: number, doctorData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, doctorData);
+  }
+
+  deleteDoctor(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  getSpecializations(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/specializations`);
+  }
+
+  getDoctorsBySpecialization(specialization: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/specialization/${specialization}`);
   }
 }
