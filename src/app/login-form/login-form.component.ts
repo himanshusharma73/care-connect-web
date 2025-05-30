@@ -36,7 +36,7 @@ export class LoginFormComponent {
     const { email, password } = this.loginForm.value;
 
     // Use the auth service to login
-    this.authService.login(email, password).subscribe({
+    this.authService.login({ email, password }).subscribe({
       next: () => {
         this.isLoading = false;
         this.router.navigate(['/dashboard']);

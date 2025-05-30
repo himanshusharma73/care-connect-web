@@ -97,8 +97,52 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .section-content {
   @apply bg-gray-50 p-5 rounded-lg border border-gray-200;
 }
+// Add these styles to your global styles.scss
+
+// Success snackbar
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+  }
+}
+
+// Error snackbar
 .error-snackbar {
-  background-color: #f44336; /* Red background for errors */
-  color: white; /* White text */
-  font-weight: bold; /* Bold text */
+  background-color: #f44336 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+  }
+  
+  &.server-error {
+    background-color: #d32f2f !important;
+  }
+  
+  &.client-error {
+    background-color: #f57c00 !important;
+  }
+}
+
+// Warning snackbar
+.warning-snackbar {
+  background-color: #ff9800 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+  }
+}
+
+// Info snackbar
+.info-snackbar {
+  background-color: #2196f3 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+  }
 }

@@ -1,56 +1,60 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { tap, delay } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
-  isAuthenticated = this.isAuthenticatedSubject.asObservable();
+  private readonly API_URL = 'http://localhost:8080/auth';
 
-  private apiUrl = 'http://localhost:8080/api';
+  constructor(private http: HttpClient, private router: Router) {}
 
-  constructor(private http: HttpClient) {}
+  login(credentials: { email: string, password: string }): Observable<any> {
+    return this.http.post<{ accessToken: string, refreshToken: string }>(
+      `${this.API_URL}/login`, credentials
+    ).pipe(
+      tap(tokens => {
+        this.setTokens(tokens.accessToken, tokens.refreshToken);
+      })
+    );
+  }
 
-  login(email: string, password: string): Observable<any> {
-    
-     if (email === 'admin@gmail.com' && password === 'admin') {
-      return of({ token: 'fake-jwt-token', user: { email } }).pipe(
-        delay(1000),
-        tap(response => {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          this.isAuthenticatedSubject.next(true);
-        })
-      );
-    }
-    
-    return throwError(() => new Error('Invalid credentials'));
-    
-    // Uncomment for actual API implementation
-    // return this.http.post<any>(`${this.apiUrl}/auth/login`, { email, password })
-    //   .pipe(
-    //     tap(response => {
-    //       localStorage.setItem('token', response.token);
-    //       localStorage.setItem('user', JSON.stringify(response.user));
-    //       this.isAuthenticatedSubject.next(true);
-    //     })
-    //   );
+  refreshToken(refreshToken: string): Observable<{ accessToken: string, refreshToken: string }> {
+    return this.http.post<{ accessToken: string, refreshToken: string }>(
+      `${this.API_URL}/refresh`, { refreshToken }
+    ).pipe(
+      tap(tokens => {
+        this.setTokens(tokens.accessToken, tokens.refreshToken);
+      }),
+      catchError(err => {
+        this.logout();
+        return throwError(() => err);
+      })
+    );
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.isAuthenticatedSubject.next(false);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    this.router.navigate(['/login']);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  private setTokens(accessToken: string, refreshToken: string): void {
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
   }
 
-  private hasToken(): boolean {
-    return !!this.getToken();
+  getAccessToken(): string | null {
+    return localStorage.getItem('accessToken');
   }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
+  }
+  get isAuthenticated(): boolean {
+  return !!this.getAccessToken();
+}
 }
