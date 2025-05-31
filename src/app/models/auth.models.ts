@@ -10,9 +10,10 @@ export interface UserRequest {
   roles: string[]
 }
 
-export interface AuthenticationResponse {
+export interface AuthResponse {
   accessToken: string
   refreshToken: string
+  expiresIn: number
 }
 
 export interface UserDto {
